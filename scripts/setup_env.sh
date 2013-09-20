@@ -10,3 +10,10 @@ source $ROOT/CONFIG
 fastboot() {
     sudo $ROOT/prebuilts/fastboot ${*}
 }
+
+# print message and exit the script                                             
+# usage: die <message>                                                          
+function die () {                                                               
+    echo ${*}                                                               
+    exit -1                                                                 
+}   
