@@ -1,0 +1,79 @@
+#!/bin/bash
+
+D=$(dirname $(readlink -f ${BASH_SOURCE}))
+source "$D/setup_env.sh"
+
+reboot_phones()
+{
+    adbs reboot
+    adbs 'wait-for-device'
+
+    sleep_countdown 15 "Waiting for phones to boot up"
+}
+
+serials=$(adbs shell getprop ro.serialno)
+
+serial1=$(echo $serials | cut -d' ' -f1)
+serial2=$(echo $serials | cut -d' ' -f2)
+
+ip1=$(gen_ip $serial1)
+ip2=$(gen_ip $serial2)
+
+run_iperf() {
+
+    local ghz=$1
+
+    echo "Starting server on $serial1/$ip1"
+
+    log1="/tmp/iperf_server_$serial1.$ghz.log"
+    xterm -e "sh -c \"adb -s $serial1 shell iperf -s -i 1 -u | tee $log1\"" &
+
+    echo "Starting client on $serial2/$ip2"
+
+    log2="/tmp/iperf_client_$serial2.$ghz.log"
+    xterm -e "sh -c \"adb -s $serial2 shell iperf -c $ip1 -i 1 -t 10 -u -b 100M | tee $log2\""
+
+    # Twice to make sure iperf quits!
+    adb -s $serial1 shell /system/xbin/killall iperf
+    adb -s $serial1 shell /system/xbin/killall iperf
+
+    cat $log1 $log2
+}
+
+join_mesh()
+{
+    local channel=$1
+    local ht=$2
+
+    adbs shell iw reg set US
+    adbs shell iw phy phy0 interface add mesh0 type mp
+    adbs shell iw dev mesh0 set channel $channel $ht
+    adbs shell ifconfig mesh0 @IP@
+    adbs shell ip link set mesh0 up
+    adbs shell iw dev mesh0 mesh join xz
+    sleep 1
+}
+
+echo "Changing to 5 GHz, channel 36, HT20"
+
+reboot_phones
+join_mesh 36 HT20
+run_iperf HT20_5GHz
+
+echo "Changing to 5 GHz, channel 36, legacy"
+
+reboot_phones
+join_mesh 36
+run_iperf legacy_5GHz
+
+echo "Changing to 2.4 GHz, channel 11, HT20"
+
+reboot_phones
+join_mesh 11 HT20
+run_iperf HT20_2.4GHz
+
+echo "Changing to 2.4 GHz, channel 11, legacy"
+
+reboot_phones
+join_mesh 11
+run_iperf legacy_2.4GHz

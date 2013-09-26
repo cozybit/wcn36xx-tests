@@ -1,0 +1,264 @@
+adb -s BX903J8X12 shell getprop ro.serialno
+adb -s BX903JMD8R shell getprop ro.serialno
+Changing to 5 GHz, channel 36, HT20
+adb -s BX903J8X12 reboot
+adb -s BX903JMD8R reboot
+adb -s BX903J8X12 wait-for-device
+adb -s BX903JMD8R wait-for-device
+Waiting for phones to boot up...............
+adb -s BX903J8X12 shell iw reg set US
+adb -s BX903JMD8R shell iw reg set US
+adb -s BX903J8X12 shell iw phy phy0 interface add mesh0 type mp
+adb -s BX903JMD8R shell iw phy phy0 interface add mesh0 type mp
+adb -s BX903J8X12 shell iw dev mesh0 set channel 36 HT20
+adb -s BX903JMD8R shell iw dev mesh0 set channel 36 HT20
+adb -s BX903J8X12 shell ifconfig mesh0 10.88.49.50
+adb -s BX903JMD8R shell ifconfig mesh0 10.68.56.82
+adb -s BX903J8X12 shell ip link set mesh0 up
+adb -s BX903JMD8R shell ip link set mesh0 up
+adb -s BX903J8X12 shell iw dev mesh0 mesh join xz
+adb -s BX903JMD8R shell iw dev mesh0 mesh join xz
+Starting server on BX903J8X12/10.88.49.50
+Starting client on BX903JMD8R/10.68.56.82
+------------------------------------------------------------
+Server listening on UDP port 5001
+Receiving 1470 byte datagrams
+UDP buffer size:  160 KByte (default)
+------------------------------------------------------------
+[  3] local 10.88.49.50 port 5001 connected with 10.68.56.82 port 41234
+[ ID] Interval       Transfer     Bandwidth        Jitter   Lost/Total Datagrams
+[  3]  0.0- 1.0 sec  2.47 MBytes  20.7 Mbits/sec   0.312 ms 1549/ 3308 (47%)
+[  3]  0.0- 1.0 sec  321 datagrams received out-of-order
+[  3]  1.0- 2.0 sec  3.60 MBytes  30.2 Mbits/sec   0.437 ms 2569/ 5139 (50%)
+[  3]  2.0- 3.0 sec  3.61 MBytes  30.3 Mbits/sec   0.281 ms 2573/ 5146 (50%)
+[  3]  3.0- 4.0 sec  3.62 MBytes  30.4 Mbits/sec   0.530 ms 2576/ 5160 (50%)
+[  3]  4.0- 5.0 sec  3.58 MBytes  30.1 Mbits/sec   0.473 ms 2550/ 5106 (50%)
+[  3]  5.0- 6.0 sec  3.59 MBytes  30.2 Mbits/sec   0.628 ms 2520/ 5084 (50%)
+[  3]  5.0- 6.0 sec  381 datagrams received out-of-order
+[  3]  6.0- 7.0 sec  3.61 MBytes  30.2 Mbits/sec   0.462 ms 2553/ 5125 (50%)
+[  3]  7.0- 8.0 sec  3.62 MBytes  30.3 Mbits/sec   1.680 ms 2617/ 5197 (50%)
+[  3]  7.0- 8.0 sec  185 datagrams received out-of-order
+[  3]  8.0- 9.0 sec  3.60 MBytes  30.2 Mbits/sec   0.399 ms 2275/ 4844 (47%)
+[  3]  8.0- 9.0 sec  776 datagrams received out-of-order
+[  3]  9.0-10.0 sec  3.57 MBytes  29.9 Mbits/sec   0.425 ms 2522/ 5066 (50%)
+[  3]  0.0-10.1 sec  35.1 MBytes  29.3 Mbits/sec   0.606 ms 24465/49504 (49%)
+[  3]  0.0-10.1 sec  1664 datagrams received out-of-order
+Waiting for server threads to complete. Interrupt again to force quit.
+------------------------------------------------------------
+Client connecting to 10.88.49.50, UDP port 5001
+Sending 1470 byte datagrams
+UDP buffer size:  160 KByte (default)
+------------------------------------------------------------
+[  3] local 10.68.56.82 port 41234 connected with 10.88.49.50 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0- 1.0 sec  8.00 GBytes  68.8 Gbits/sec
+[  3]  1.0- 2.0 sec  7.19 MBytes  60.3 Mbits/sec
+[  3]  2.0- 3.0 sec  7.21 MBytes  60.5 Mbits/sec
+[  3]  3.0- 4.0 sec  7.26 MBytes  60.9 Mbits/sec
+[  3]  4.0- 5.0 sec  7.16 MBytes  60.1 Mbits/sec
+[  3]  5.0- 6.0 sec  7.11 MBytes  59.7 Mbits/sec
+[  3]  6.0- 7.0 sec  7.14 MBytes  59.9 Mbits/sec
+[  3]  7.0- 8.0 sec  7.14 MBytes  59.9 Mbits/sec
+[  3]  8.0- 9.0 sec  6.97 MBytes  58.5 Mbits/sec
+[  3]  9.0-10.0 sec  7.09 MBytes  59.5 Mbits/sec
+[  3]  0.0-10.0 sec  8.07 GBytes  6.93 Gbits/sec
+[  3] Sent 49506 datagrams
+[  3] Server Report:
+[  3]  0.0-10.1 sec  35.1 MBytes  29.3 Mbits/sec   0.606 ms 24465/49504 (49%)
+[  3]  0.0-10.1 sec  1664 datagrams received out-of-order
+Changing to 5 GHz, channel 36, legacy
+adb -s BX903J8X12 reboot
+adb -s BX903JMD8R reboot
+adb -s BX903J8X12 wait-for-device
+adb -s BX903JMD8R wait-for-device
+Waiting for phones to boot up...............
+adb -s BX903J8X12 shell iw reg set US
+adb -s BX903JMD8R shell iw reg set US
+adb -s BX903J8X12 shell iw phy phy0 interface add mesh0 type mp
+adb -s BX903JMD8R shell iw phy phy0 interface add mesh0 type mp
+adb -s BX903J8X12 shell iw dev mesh0 set channel 36
+adb -s BX903JMD8R shell iw dev mesh0 set channel 36
+adb -s BX903J8X12 shell ifconfig mesh0 10.88.49.50
+adb -s BX903JMD8R shell ifconfig mesh0 10.68.56.82
+adb -s BX903J8X12 shell ip link set mesh0 up
+adb -s BX903JMD8R shell ip link set mesh0 up
+adb -s BX903J8X12 shell iw dev mesh0 mesh join xz
+adb -s BX903JMD8R shell iw dev mesh0 mesh join xz
+Starting server on BX903J8X12/10.88.49.50
+Starting client on BX903JMD8R/10.68.56.82
+------------------------------------------------------------
+Server listening on UDP port 5001
+Receiving 1470 byte datagrams
+UDP buffer size:  160 KByte (default)
+------------------------------------------------------------
+[  3] local 10.88.49.50 port 5001 connected with 10.68.56.82 port 47879
+[ ID] Interval       Transfer     Bandwidth        Jitter   Lost/Total Datagrams
+[  3]  0.0- 1.0 sec  2.46 MBytes  20.6 Mbits/sec   0.414 ms 1584/ 3337 (47%)
+[  3]  1.0- 2.0 sec  3.35 MBytes  28.1 Mbits/sec   0.700 ms 2438/ 4831 (50%)
+[  3]  2.0- 3.0 sec  3.38 MBytes  28.4 Mbits/sec   0.284 ms 2411/ 4822 (50%)
+[  3]  3.0- 4.0 sec  3.38 MBytes  28.4 Mbits/sec   0.636 ms 2406/ 4817 (50%)
+[  3]  4.0- 5.0 sec  3.39 MBytes  28.4 Mbits/sec   0.469 ms 2399/ 4817 (50%)
+[  3]  4.0- 5.0 sec  313 datagrams received out-of-order
+[  3]  5.0- 6.0 sec  3.40 MBytes  28.5 Mbits/sec   0.306 ms 2395/ 4818 (50%)
+[  3]  6.0- 7.0 sec  3.40 MBytes  28.5 Mbits/sec   0.636 ms 2394/ 4816 (50%)
+[  3]  6.0- 7.0 sec  321 datagrams received out-of-order
+[  3]  7.0- 8.0 sec  3.39 MBytes  28.5 Mbits/sec   0.693 ms 2394/ 4814 (50%)
+[  3]  7.0- 8.0 sec  443 datagrams received out-of-order
+[  3]  8.0- 9.0 sec  3.38 MBytes  28.3 Mbits/sec   0.759 ms 2350/ 4760 (49%)
+[  3]  8.0- 9.0 sec  474 datagrams received out-of-order
+[  3]  9.0-10.0 sec  3.40 MBytes  28.5 Mbits/sec   0.483 ms 2397/ 4824 (50%)
+[  3]  9.0-10.0 sec  738 datagrams received out-of-order
+[  3]  0.0-10.0 sec  33.0 MBytes  27.6 Mbits/sec   1.632 ms 23189/46732 (50%)
+[  3]  0.0-10.0 sec  2293 datagrams received out-of-order
+Waiting for server threads to complete. Interrupt again to force quit.
+------------------------------------------------------------
+Client connecting to 10.88.49.50, UDP port 5001
+Sending 1470 byte datagrams
+UDP buffer size:  160 KByte (default)
+------------------------------------------------------------
+[  3] local 10.68.56.82 port 47879 connected with 10.88.49.50 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0- 1.0 sec  24.0 GBytes   206 Gbits/sec
+[  3]  1.0- 2.0 sec  6.81 MBytes  57.1 Mbits/sec
+[  3]  2.0- 3.0 sec  6.75 MBytes  56.6 Mbits/sec
+[  3]  3.0- 4.0 sec  6.75 MBytes  56.6 Mbits/sec
+[  3]  4.0- 5.0 sec  6.76 MBytes  56.7 Mbits/sec
+[  3]  5.0- 6.0 sec  6.71 MBytes  56.3 Mbits/sec
+[  3]  6.0- 7.0 sec  6.81 MBytes  57.1 Mbits/sec
+[  3]  7.0- 8.0 sec  6.66 MBytes  55.9 Mbits/sec
+[  3]  8.0- 9.0 sec  6.68 MBytes  56.0 Mbits/sec
+[  3]  9.0-10.0 sec  6.59 MBytes  55.3 Mbits/sec
+[  3]  0.0-10.0 sec  24.1 GBytes  20.7 Gbits/sec
+[  3] Sent 46733 datagrams
+[  3] Server Report:
+[  3]  0.0-10.0 sec  33.0 MBytes  27.6 Mbits/sec   1.631 ms 23189/46732 (50%)
+[  3]  0.0-10.0 sec  2293 datagrams received out-of-order
+Changing to 2.4 GHz, channel 11, HT20
+adb -s BX903J8X12 reboot
+adb -s BX903JMD8R reboot
+adb -s BX903J8X12 wait-for-device
+adb -s BX903JMD8R wait-for-device
+Waiting for phones to boot up...............
+adb -s BX903J8X12 shell iw reg set US
+adb -s BX903JMD8R shell iw reg set US
+adb -s BX903J8X12 shell iw phy phy0 interface add mesh0 type mp
+adb -s BX903JMD8R shell iw phy phy0 interface add mesh0 type mp
+adb -s BX903J8X12 shell iw dev mesh0 set channel 11 HT20
+adb -s BX903JMD8R shell iw dev mesh0 set channel 11 HT20
+adb -s BX903J8X12 shell ifconfig mesh0 10.88.49.50
+adb -s BX903JMD8R shell ifconfig mesh0 10.68.56.82
+adb -s BX903J8X12 shell ip link set mesh0 up
+adb -s BX903JMD8R shell ip link set mesh0 up
+adb -s BX903J8X12 shell iw dev mesh0 mesh join xz
+adb -s BX903JMD8R shell iw dev mesh0 mesh join xz
+Starting server on BX903J8X12/10.88.49.50
+Starting client on BX903JMD8R/10.68.56.82
+------------------------------------------------------------
+Server listening on UDP port 5001
+Receiving 1470 byte datagrams
+UDP buffer size:  160 KByte (default)
+------------------------------------------------------------
+[  3] local 10.88.49.50 port 5001 connected with 10.68.56.82 port 50433
+[ ID] Interval       Transfer     Bandwidth        Jitter   Lost/Total Datagrams
+[  3]  0.0- 1.0 sec   630 KBytes  5.16 Mbits/sec   1.752 ms  267/  706 (38%)
+[  3]  0.0- 1.0 sec  119 datagrams received out-of-order
+[  3]  1.0- 2.0 sec  1.82 MBytes  15.3 Mbits/sec   2.022 ms 1273/ 2570 (50%)
+[  3]  1.0- 2.0 sec  202 datagrams received out-of-order
+[  3]  2.0- 3.0 sec  2.00 MBytes  16.8 Mbits/sec   0.911 ms 1426/ 2852 (50%)
+[  3]  3.0- 4.0 sec  2.07 MBytes  17.4 Mbits/sec   0.665 ms 1477/ 2954 (50%)
+[  3]  4.0- 5.0 sec  2.01 MBytes  16.9 Mbits/sec   0.667 ms 1417/ 2853 (50%)
+[  3]  4.0- 5.0 sec  321 datagrams received out-of-order
+[  3]  5.0- 6.0 sec  2.05 MBytes  17.2 Mbits/sec   1.080 ms 1433/ 2896 (49%)
+[  3]  6.0- 7.0 sec  1.61 MBytes  13.5 Mbits/sec   0.707 ms 1137/ 2282 (50%)
+[  3]  7.0- 8.0 sec  2.09 MBytes  17.5 Mbits/sec   1.135 ms 1470/ 2958 (50%)
+[  3]  8.0- 9.0 sec  1.56 MBytes  13.1 Mbits/sec   1.416 ms 1108/ 2221 (50%)
+[  3]  9.0-10.0 sec  2.03 MBytes  17.0 Mbits/sec   0.630 ms 1445/ 2893 (50%)
+[  3]  0.0-10.1 sec  18.1 MBytes  15.0 Mbits/sec   2.037 ms 12650/25584 (49%)
+[  3]  0.0-10.1 sec  643 datagrams received out-of-order
+Waiting for server threads to complete. Interrupt again to force quit.
+------------------------------------------------------------
+Client connecting to 10.88.49.50, UDP port 5001
+Sending 1470 byte datagrams
+UDP buffer size:  160 KByte (default)
+------------------------------------------------------------
+[  3] local 10.68.56.82 port 50433 connected with 10.88.49.50 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0- 1.0 sec  1.51 MBytes  12.7 Mbits/sec
+[  3]  1.0- 2.0 sec  3.73 MBytes  31.3 Mbits/sec
+[  3]  2.0- 3.0 sec  3.83 MBytes  32.2 Mbits/sec
+[  3]  3.0- 4.0 sec  4.17 MBytes  35.0 Mbits/sec
+[  3]  4.0- 5.0 sec  4.04 MBytes  33.9 Mbits/sec
+[  3]  5.0- 6.0 sec  4.08 MBytes  34.2 Mbits/sec
+[  3]  6.0- 7.0 sec  3.25 MBytes  27.3 Mbits/sec
+[  3]  7.0- 8.0 sec  4.07 MBytes  34.2 Mbits/sec
+[  3]  8.0- 9.0 sec  3.10 MBytes  26.0 Mbits/sec
+[  3]  9.0-10.0 sec  4.08 MBytes  34.2 Mbits/sec
+[  3]  0.0-10.0 sec  35.9 MBytes  30.0 Mbits/sec
+[  3] Sent 25586 datagrams
+[  3] Server Report:
+[  3]  0.0-10.1 sec  18.1 MBytes  15.0 Mbits/sec   2.037 ms 12650/25584 (49%)
+[  3]  0.0-10.1 sec  643 datagrams received out-of-order
+Changing to 2.4 GHz, channel 11, legacy
+adb -s BX903J8X12 reboot
+adb -s BX903JMD8R reboot
+adb -s BX903J8X12 wait-for-device
+adb -s BX903JMD8R wait-for-device
+Waiting for phones to boot up...............
+adb -s BX903J8X12 shell iw reg set US
+adb -s BX903JMD8R shell iw reg set US
+adb -s BX903J8X12 shell iw phy phy0 interface add mesh0 type mp
+adb -s BX903JMD8R shell iw phy phy0 interface add mesh0 type mp
+adb -s BX903J8X12 shell iw dev mesh0 set channel 11
+adb -s BX903JMD8R shell iw dev mesh0 set channel 11
+adb -s BX903J8X12 shell ifconfig mesh0 10.88.49.50
+adb -s BX903JMD8R shell ifconfig mesh0 10.68.56.82
+adb -s BX903J8X12 shell ip link set mesh0 up
+adb -s BX903JMD8R shell ip link set mesh0 up
+adb -s BX903J8X12 shell iw dev mesh0 mesh join xz
+adb -s BX903JMD8R shell iw dev mesh0 mesh join xz
+Starting server on BX903J8X12/10.88.49.50
+Starting client on BX903JMD8R/10.68.56.82
+------------------------------------------------------------
+Server listening on UDP port 5001
+Receiving 1470 byte datagrams
+UDP buffer size:  160 KByte (default)
+------------------------------------------------------------
+[  3] local 10.88.49.50 port 5001 connected with 10.68.56.82 port 37236
+[ ID] Interval       Transfer     Bandwidth        Jitter   Lost/Total Datagrams
+[  3]  0.0- 1.0 sec   584 KBytes  4.79 Mbits/sec   5.280 ms  272/  679 (40%)
+[  3]  0.0- 1.0 sec  128 datagrams received out-of-order
+[  3]  1.0- 2.0 sec  1.72 MBytes  14.4 Mbits/sec   0.521 ms 1178/ 2406 (49%)
+[  3]  1.0- 2.0 sec  555 datagrams received out-of-order
+[  3]  2.0- 3.0 sec  1.43 MBytes  12.0 Mbits/sec   2.274 ms 1020/ 2042 (50%)
+[  3]  3.0- 4.0 sec  1.61 MBytes  13.5 Mbits/sec   1.599 ms 1148/ 2300 (50%)
+[  3]  4.0- 5.0 sec  1.64 MBytes  13.8 Mbits/sec   3.629 ms 1154/ 2324 (50%)
+[  3]  4.0- 5.0 sec  307 datagrams received out-of-order
+[  3]  5.0- 6.0 sec  1.39 MBytes  11.7 Mbits/sec   0.815 ms  991/ 1984 (50%)
+[  3]  6.0- 7.0 sec  1.08 MBytes  9.09 Mbits/sec   7.227 ms  873/ 1646 (53%)
+[  3]  6.0- 7.0 sec  188 datagrams received out-of-order
+[  3]  7.0- 8.0 sec  1.49 MBytes  12.5 Mbits/sec   1.326 ms  909/ 1972 (46%)
+[  3]  7.0- 8.0 sec  133 datagrams received out-of-order
+[  3]  8.0- 9.0 sec  1.44 MBytes  12.1 Mbits/sec   0.850 ms 1022/ 2049 (50%)
+[  3]  9.0-10.0 sec  1.19 MBytes  10.0 Mbits/sec   4.325 ms  853/ 1705 (50%)
+[  3]  9.0-10.0 sec  184 datagrams received out-of-order
+Waiting for server threads to complete. Interrupt again to force quit.
+------------------------------------------------------------
+Client connecting to 10.88.49.50, UDP port 5001
+Sending 1470 byte datagrams
+UDP buffer size:  160 KByte (default)
+------------------------------------------------------------
+[  3] local 10.68.56.82 port 37236 connected with 10.88.49.50 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0- 1.0 sec  4.00 GBytes  34.4 Gbits/sec
+[  3]  1.0- 2.0 sec  3.29 MBytes  27.6 Mbits/sec
+[  3]  2.0- 3.0 sec  2.94 MBytes  24.6 Mbits/sec
+[  3]  3.0- 4.0 sec  3.20 MBytes  26.9 Mbits/sec
+[  3]  4.0- 5.0 sec  3.42 MBytes  28.6 Mbits/sec
+[  3]  5.0- 6.0 sec  2.60 MBytes  21.8 Mbits/sec
+[  3]  6.0- 7.0 sec  2.25 MBytes  18.9 Mbits/sec
+[  3]  7.0- 8.0 sec  2.79 MBytes  23.4 Mbits/sec
+[  3]  8.0- 9.0 sec  2.91 MBytes  24.4 Mbits/sec
+[  3]  9.0-10.0 sec  2.48 MBytes  20.8 Mbits/sec
+[  3]  0.0-10.0 sec  4.03 GBytes  3.45 Gbits/sec
+[  3] Sent 19493 datagrams
+[  3] WARNING: did not receive ack of last datagram after 10 tries.
