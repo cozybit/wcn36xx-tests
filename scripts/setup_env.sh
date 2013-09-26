@@ -31,15 +31,16 @@ function Q () {
 }
 
 # grab a list of Xperia X phones
-xperiaz=$(
+list_xperiaz() {
       adb devices 2>&1 \
     | sed 's///g'    \
     | grep 'device'    \
     | cut -d$'\t' -f1  \
-    | grep '^BX'       )
+    | grep '^BX'
+}
 
 adbs() {
-    for dev in $xperiaz; do
+    for dev in `list_xperiaz`; do
         ip=$(gen_ip $dev)
         cmd=$(echo ${*} | sed "s/@IP@/$ip/")
         echo adb -s $dev $cmd 1>&2
