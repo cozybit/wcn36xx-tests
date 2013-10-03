@@ -82,3 +82,102 @@ sleep_countdown() {
     done
     echo
 }
+
+wait_for_fastboot() {
+    local serial=$1
+    local once=
+    while ! fastboot devices | grep -q $serial; do
+        if [[ -z $once ]]; then
+            echo -n 'Waiting for fastboot'; once=1
+        fi
+        echo -n '.'; sleep 0.5
+    done
+    if [[ ! -z $once ]]; then
+        echo
+    fi
+}
+
+wait_for_adb() {
+    local serial=$1
+    local once=
+    while ! adb devices | grep -q $serial; do
+        if [[ -z $once ]]; then
+            echo -n 'Waiting for adb'; once=1
+        fi
+        echo -n '.'; sleep 0.5
+    done
+    if [[ ! -z $once ]]; then
+        echo
+    fi
+}
+
+UPTIME_FILE=
+
+capture_uptime() {
+    UPTIME_FILE=`tempfile`
+    for xz in `list_xperiaz`; do
+        uptime=`adb -s $xz shell cat /proc/uptime|sed 's###g'|awk '{print $1}'`
+        echo $xz $uptime >>$UPTIME_FILE
+    done
+}
+
+wait_for_adbs() {
+
+    trap "IFS=$IFS" EXIT
+    IFS=$'\n'
+
+    for xz in `cat $UPTIME_FILE`; do
+
+        local serial=`echo $xz | awk '{print $1}'`
+        local uptime=`echo $xz | awk '{print $2}'`
+
+        echo "Serial: $serial, last uptime: $uptime"
+
+        while `true`; do
+
+            local new_uptime=`adb -s $serial shell cat /proc/uptime 2>&1 | awk '{print $1}'`
+            if [[ ! $new_uptime =~ ^[[:digit:]][[:digit:]]*[.][[:digit:]][[:digit:]]*$ ]]; then
+                sleep 0.5
+                continue
+            fi
+
+            local new_uptime=`echo $new_uptime | sed 's/[.][0-9]*$//'`
+            local uptime=`echo $uptime | sed 's/[.][0-9]*$//'`
+
+            if [[ $new_uptime -ge $uptime ]]; then
+                sleep 0.5
+                continue
+            fi
+
+            echo "Got new uptime: $new_uptime"
+            break
+
+        done
+
+    done
+}
+
+join_mesh()
+{
+    local channel=$1
+    local ht=$2
+
+    adbs shell iw reg set US
+    adbs shell iw phy phy0 interface add mesh0 type mp
+    adbs shell iw dev mesh0 set channel $channel $ht
+    sleep 0.5
+    adbs shell ip link set mesh0 up
+    adbs shell iw dev mesh0 mesh join xz
+    sleep 0.5
+    adbs shell ifconfig mesh0 @IP@
+    sleep 0.5
+}
+
+reboot_phones()
+{
+    capture_uptime
+    adbs -p reboot
+
+    wait_for_adbs
+    adbs 'wait-for-device'
+}
