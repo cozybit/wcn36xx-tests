@@ -3,25 +3,17 @@
 D=$(dirname $(readlink -f ${BASH_SOURCE}))
 source "$D/setup_env.sh"
 
-reboot_phones()
-{
-    adbs reboot
-    adbs 'wait-for-device'
-
-    sleep_countdown 15 "Waiting for phones to boot up"
-}
-
-serials=$(adbs shell getprop ro.serialno)
-
-serial1=$(echo $serials | cut -d' ' -f1)
-serial2=$(echo $serials | cut -d' ' -f2)
-
-ip1=$(gen_ip $serial1)
-ip2=$(gen_ip $serial2)
-
 run_iperf() {
 
     local ghz=$1
+
+    local serials=$(adbs shell getprop ro.serialno)
+    
+    local serial1=$(echo $serials | cut -d' ' -f1)
+    local serial2=$(echo $serials | cut -d' ' -f2)
+
+    local ip1=$(gen_ip $serial1)
+    local ip2=$(gen_ip $serial2)
 
     echo "Starting server on $serial1/$ip1"
 
@@ -38,20 +30,6 @@ run_iperf() {
     adb -s $serial1 shell /system/xbin/killall iperf
 
     cat $log1 $log2
-}
-
-join_mesh()
-{
-    local channel=$1
-    local ht=$2
-
-    adbs shell iw reg set US
-    adbs shell iw phy phy0 interface add mesh0 type mp
-    adbs shell iw dev mesh0 set channel $channel $ht
-    adbs shell ifconfig mesh0 @IP@
-    adbs shell ip link set mesh0 up
-    adbs shell iw dev mesh0 mesh join xz
-    sleep 1
 }
 
 echo "Changing to 5 GHz, channel 36, HT20"
