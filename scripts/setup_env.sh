@@ -163,10 +163,13 @@ join_mesh()
     local ht=$2
 
     adbs shell iw reg set US
+    sleep 0.5
     adbs shell iw phy phy0 interface add mesh0 type mp
+    sleep 0.5
     adbs shell iw dev mesh0 set channel $channel $ht
     sleep 0.5
     adbs shell ip link set mesh0 up
+    sleep 0.5
     adbs shell iw dev mesh0 mesh join xz
     sleep 0.5
     adbs shell ifconfig mesh0 @IP@
