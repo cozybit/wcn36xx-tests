@@ -36,7 +36,7 @@ list_xperiaz() {
     | sed 's///g'    \
     | grep 'device'    \
     | cut -d$'\t' -f1  \
-    | grep '^BX'
+    | egrep "${XZ_SERIAL}"
 }
 
 adbs() {
