@@ -40,11 +40,21 @@ list_xperiaz() {
 }
 
 adbs() {
+    while getopts "p" options; do
+        case $options in
+            p) local parallel=1; shift;;
+        esac
+    done
     for dev in `list_xperiaz`; do
-        ip=$(gen_ip $dev)
-        cmd=$(echo ${*} | sed "s/@IP@/$ip/")
-        echo adb -s $dev $cmd 1>&2
-        adb -s $dev $cmd | sed 's///g'
+        local ip=$(gen_ip $dev)
+        local cmd=$(echo ${*} | sed "s/@IP@/$ip/")
+        if [[ -z $parallel ]]; then
+            echo adb -s $dev $cmd 1>&2
+            eval "adb -s $dev $cmd" | sed 's///g'
+        else
+            echo '(PARALLEL)' adb -s $dev $cmd 1>&2
+            eval "adb -s $dev $cmd" &>/dev/null &
+        fi
     done
 }
 
