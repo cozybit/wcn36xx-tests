@@ -1,0 +1,352 @@
+(PARALLEL) adb -s BX903J8X12 reboot
+(PARALLEL) adb -s BX903JMD8R reboot
+(PARALLEL) adb -s BX903J8AWV reboot
+(PARALLEL) adb -s CB5A1TKGX8 reboot
+Serial: BX903J8X12, last uptime: 53.06
+Got new uptime: 6
+Serial: BX903JMD8R, last uptime: 52.83
+Got new uptime: 8
+Serial: BX903J8AWV, last uptime: 53.21
+Got new uptime: 8
+Serial: CB5A1TKGX8, last uptime: 53.22
+Got new uptime: 8
+adb -s CB5A1TKGX8 wait-for-device
+adb -s BX903J8AWV wait-for-device
+adb -s BX903J8X12 wait-for-device
+adb -s BX903JMD8R wait-for-device
+adb -s CB5A1TKGX8 shell iw reg set US
+adb -s BX903J8AWV shell iw reg set US
+adb -s BX903J8X12 shell iw reg set US
+adb -s BX903JMD8R shell iw reg set US
+adb -s CB5A1TKGX8 shell iw phy phy0 interface add mesh0 type mp
+adb -s BX903J8AWV shell iw phy phy0 interface add mesh0 type mp
+adb -s BX903J8X12 shell iw phy phy0 interface add mesh0 type mp
+adb -s BX903JMD8R shell iw phy phy0 interface add mesh0 type mp
+adb -s CB5A1TKGX8 shell iw dev mesh0 set channel 36 HT20
+adb -s BX903J8AWV shell iw dev mesh0 set channel 36 HT20
+adb -s BX903J8X12 shell iw dev mesh0 set channel 36 HT20
+adb -s BX903JMD8R shell iw dev mesh0 set channel 36 HT20
+adb -s CB5A1TKGX8 shell ip link set mesh0 up
+adb -s BX903J8AWV shell ip link set mesh0 up
+adb -s BX903J8X12 shell ip link set mesh0 up
+adb -s BX903JMD8R shell ip link set mesh0 up
+adb -s CB5A1TKGX8 shell iw dev mesh0 mesh join xz
+adb -s BX903J8AWV shell iw dev mesh0 mesh join xz
+adb -s BX903J8X12 shell iw dev mesh0 mesh join xz
+adb -s BX903JMD8R shell iw dev mesh0 mesh join xz
+adb -s CB5A1TKGX8 shell ifconfig mesh0 10.71.88.56
+adb -s BX903J8AWV shell ifconfig mesh0 10.65.87.86
+adb -s BX903J8X12 shell ifconfig mesh0 10.88.49.50
+adb -s BX903JMD8R shell ifconfig mesh0 10.68.56.82
+Waiting for some data from ping....................
+<<<<<<  /tmp/ping_from_CB5A1TKGX8_to_BX903J8AWV.log  >>>>>>
+PING 10.65.87.86 (10.65.87.86) 56(84) bytes of data.
+64 bytes from 10.65.87.86: icmp_seq=1 ttl=64 time=2.25 ms
+64 bytes from 10.65.87.86: icmp_seq=2 ttl=64 time=0.732 ms
+64 bytes from 10.65.87.86: icmp_seq=3 ttl=64 time=0.641 ms
+64 bytes from 10.65.87.86: icmp_seq=4 ttl=64 time=0.579 ms
+64 bytes from 10.65.87.86: icmp_seq=5 ttl=64 time=0.610 ms
+64 bytes from 10.65.87.86: icmp_seq=6 ttl=64 time=0.672 ms
+64 bytes from 10.65.87.86: icmp_seq=7 ttl=64 time=0.641 ms
+64 bytes from 10.65.87.86: icmp_seq=8 ttl=64 time=0.733 ms
+64 bytes from 10.65.87.86: icmp_seq=9 ttl=64 time=0.610 ms
+64 bytes from 10.65.87.86: icmp_seq=10 ttl=64 time=0.611 ms
+64 bytes from 10.65.87.86: icmp_seq=11 ttl=64 time=0.611 ms
+64 bytes from 10.65.87.86: icmp_seq=12 ttl=64 time=0.549 ms
+64 bytes from 10.65.87.86: icmp_seq=13 ttl=64 time=0.549 ms
+64 bytes from 10.65.87.86: icmp_seq=14 ttl=64 time=0.580 ms
+64 bytes from 10.65.87.86: icmp_seq=15 ttl=64 time=0.580 ms
+64 bytes from 10.65.87.86: icmp_seq=16 ttl=64 time=0.549 ms
+64 bytes from 10.65.87.86: icmp_seq=17 ttl=64 time=0.580 ms
+64 bytes from 10.65.87.86: icmp_seq=18 ttl=64 time=0.702 ms
+64 bytes from 10.65.87.86: icmp_seq=19 ttl=64 time=0.610 ms
+64 bytes from 10.65.87.86: icmp_seq=20 ttl=64 time=0.763 ms
+64 bytes from 10.65.87.86: icmp_seq=21 ttl=64 time=0.854 ms
+64 bytes from 10.65.87.86: icmp_seq=22 ttl=64 time=0.763 ms
+64 bytes from 10.65.87.86: icmp_seq=23 ttl=64 time=0.641 ms
+64 bytes from 10.65.87.86: icmp_seq=24 ttl=64 time=0.671 ms
+64 bytes from 10.65.87.86: icmp_seq=25 ttl=64 time=0.763 ms
+64 bytes from 10.65.87.86: icmp_seq=26 ttl=64 time=0.671 ms
+<<<<<<  /tmp/ping_from_CB5A1TKGX8_to_BX903J8X12.log  >>>>>>
+PING 10.88.49.50 (10.88.49.50) 56(84) bytes of data.
+64 bytes from 10.88.49.50: icmp_seq=1 ttl=64 time=2.80 ms
+64 bytes from 10.88.49.50: icmp_seq=2 ttl=64 time=0.733 ms
+64 bytes from 10.88.49.50: icmp_seq=3 ttl=64 time=0.671 ms
+64 bytes from 10.88.49.50: icmp_seq=4 ttl=64 time=0.641 ms
+64 bytes from 10.88.49.50: icmp_seq=5 ttl=64 time=0.672 ms
+64 bytes from 10.88.49.50: icmp_seq=6 ttl=64 time=0.885 ms
+64 bytes from 10.88.49.50: icmp_seq=7 ttl=64 time=0.885 ms
+64 bytes from 10.88.49.50: icmp_seq=8 ttl=64 time=0.763 ms
+64 bytes from 10.88.49.50: icmp_seq=9 ttl=64 time=0.916 ms
+64 bytes from 10.88.49.50: icmp_seq=10 ttl=64 time=1.25 ms
+64 bytes from 10.88.49.50: icmp_seq=11 ttl=64 time=0.580 ms
+64 bytes from 10.88.49.50: icmp_seq=12 ttl=64 time=0.579 ms
+64 bytes from 10.88.49.50: icmp_seq=13 ttl=64 time=0.580 ms
+64 bytes from 10.88.49.50: icmp_seq=14 ttl=64 time=0.580 ms
+64 bytes from 10.88.49.50: icmp_seq=15 ttl=64 time=0.518 ms
+64 bytes from 10.88.49.50: icmp_seq=16 ttl=64 time=0.580 ms
+64 bytes from 10.88.49.50: icmp_seq=17 ttl=64 time=0.672 ms
+64 bytes from 10.88.49.50: icmp_seq=18 ttl=64 time=0.824 ms
+64 bytes from 10.88.49.50: icmp_seq=19 ttl=64 time=0.702 ms
+64 bytes from 10.88.49.50: icmp_seq=20 ttl=64 time=0.702 ms
+64 bytes from 10.88.49.50: icmp_seq=21 ttl=64 time=0.672 ms
+64 bytes from 10.88.49.50: icmp_seq=22 ttl=64 time=0.824 ms
+64 bytes from 10.88.49.50: icmp_seq=23 ttl=64 time=0.733 ms
+64 bytes from 10.88.49.50: icmp_seq=24 ttl=64 time=0.763 ms
+64 bytes from 10.88.49.50: icmp_seq=25 ttl=64 time=0.702 ms
+64 bytes from 10.88.49.50: icmp_seq=26 ttl=64 time=0.733 ms
+<<<<<<  /tmp/ping_from_CB5A1TKGX8_to_BX903JMD8R.log  >>>>>>
+PING 10.68.56.82 (10.68.56.82) 56(84) bytes of data.
+64 bytes from 10.68.56.82: icmp_seq=1 ttl=64 time=2.96 ms
+64 bytes from 10.68.56.82: icmp_seq=2 ttl=64 time=0.641 ms
+64 bytes from 10.68.56.82: icmp_seq=3 ttl=64 time=0.611 ms
+64 bytes from 10.68.56.82: icmp_seq=4 ttl=64 time=0.580 ms
+64 bytes from 10.68.56.82: icmp_seq=5 ttl=64 time=0.641 ms
+64 bytes from 10.68.56.82: icmp_seq=6 ttl=64 time=0.641 ms
+64 bytes from 10.68.56.82: icmp_seq=7 ttl=64 time=0.611 ms
+64 bytes from 10.68.56.82: icmp_seq=8 ttl=64 time=0.580 ms
+64 bytes from 10.68.56.82: icmp_seq=9 ttl=64 time=0.610 ms
+64 bytes from 10.68.56.82: icmp_seq=10 ttl=64 time=0.580 ms
+64 bytes from 10.68.56.82: icmp_seq=11 ttl=64 time=0.611 ms
+64 bytes from 10.68.56.82: icmp_seq=12 ttl=64 time=0.549 ms
+64 bytes from 10.68.56.82: icmp_seq=13 ttl=64 time=0.550 ms
+64 bytes from 10.68.56.82: icmp_seq=14 ttl=64 time=0.610 ms
+64 bytes from 10.68.56.82: icmp_seq=15 ttl=64 time=0.580 ms
+64 bytes from 10.68.56.82: icmp_seq=16 ttl=64 time=0.610 ms
+64 bytes from 10.68.56.82: icmp_seq=17 ttl=64 time=0.733 ms
+64 bytes from 10.68.56.82: icmp_seq=18 ttl=64 time=0.641 ms
+64 bytes from 10.68.56.82: icmp_seq=19 ttl=64 time=0.763 ms
+64 bytes from 10.68.56.82: icmp_seq=20 ttl=64 time=1.22 ms
+64 bytes from 10.68.56.82: icmp_seq=21 ttl=64 time=0.641 ms
+64 bytes from 10.68.56.82: icmp_seq=22 ttl=64 time=0.886 ms
+64 bytes from 10.68.56.82: icmp_seq=23 ttl=64 time=0.611 ms
+64 bytes from 10.68.56.82: icmp_seq=24 ttl=64 time=0.732 ms
+64 bytes from 10.68.56.82: icmp_seq=25 ttl=64 time=0.763 ms
+64 bytes from 10.68.56.82: icmp_seq=26 ttl=64 time=0.672 ms
+<<<<<<  /tmp/ping_from_BX903J8AWV_to_CB5A1TKGX8.log  >>>>>>
+PING 10.71.88.56 (10.71.88.56) 56(84) bytes of data.
+64 bytes from 10.71.88.56: icmp_seq=1 ttl=64 time=0.976 ms
+64 bytes from 10.71.88.56: icmp_seq=2 ttl=64 time=0.794 ms
+64 bytes from 10.71.88.56: icmp_seq=3 ttl=64 time=0.549 ms
+64 bytes from 10.71.88.56: icmp_seq=4 ttl=64 time=1.58 ms
+64 bytes from 10.71.88.56: icmp_seq=5 ttl=64 time=0.579 ms
+64 bytes from 10.71.88.56: icmp_seq=6 ttl=64 time=0.641 ms
+64 bytes from 10.71.88.56: icmp_seq=7 ttl=64 time=0.793 ms
+64 bytes from 10.71.88.56: icmp_seq=8 ttl=64 time=0.580 ms
+64 bytes from 10.71.88.56: icmp_seq=9 ttl=64 time=2.16 ms
+64 bytes from 10.71.88.56: icmp_seq=10 ttl=64 time=1.03 ms
+64 bytes from 10.71.88.56: icmp_seq=11 ttl=64 time=1.06 ms
+64 bytes from 10.71.88.56: icmp_seq=12 ttl=64 time=0.519 ms
+64 bytes from 10.71.88.56: icmp_seq=13 ttl=64 time=0.580 ms
+64 bytes from 10.71.88.56: icmp_seq=14 ttl=64 time=0.610 ms
+64 bytes from 10.71.88.56: icmp_seq=15 ttl=64 time=0.580 ms
+64 bytes from 10.71.88.56: icmp_seq=16 ttl=64 time=0.489 ms
+64 bytes from 10.71.88.56: icmp_seq=17 ttl=64 time=0.641 ms
+64 bytes from 10.71.88.56: icmp_seq=18 ttl=64 time=0.549 ms
+64 bytes from 10.71.88.56: icmp_seq=19 ttl=64 time=0.519 ms
+64 bytes from 10.71.88.56: icmp_seq=20 ttl=64 time=0.763 ms
+64 bytes from 10.71.88.56: icmp_seq=21 ttl=64 time=0.702 ms
+64 bytes from 10.71.88.56: icmp_seq=22 ttl=64 time=0.702 ms
+64 bytes from 10.71.88.56: icmp_seq=23 ttl=64 time=0.702 ms
+64 bytes from 10.71.88.56: icmp_seq=24 ttl=64 time=0.671 ms
+64 bytes from 10.71.88.56: icmp_seq=25 ttl=64 time=0.672 ms
+<<<<<<  /tmp/ping_from_BX903J8AWV_to_BX903J8X12.log  >>>>>>
+PING 10.88.49.50 (10.88.49.50) 56(84) bytes of data.
+64 bytes from 10.88.49.50: icmp_seq=1 ttl=64 time=1.64 ms
+64 bytes from 10.88.49.50: icmp_seq=2 ttl=64 time=0.549 ms
+64 bytes from 10.88.49.50: icmp_seq=3 ttl=64 time=0.519 ms
+64 bytes from 10.88.49.50: icmp_seq=4 ttl=64 time=0.763 ms
+64 bytes from 10.88.49.50: icmp_seq=5 ttl=64 time=0.916 ms
+64 bytes from 10.88.49.50: icmp_seq=6 ttl=64 time=1.03 ms
+64 bytes from 10.88.49.50: icmp_seq=7 ttl=64 time=0.763 ms
+64 bytes from 10.88.49.50: icmp_seq=8 ttl=64 time=0.825 ms
+64 bytes from 10.88.49.50: icmp_seq=9 ttl=64 time=1.00 ms
+64 bytes from 10.88.49.50: icmp_seq=10 ttl=64 time=0.518 ms
+64 bytes from 10.88.49.50: icmp_seq=11 ttl=64 time=0.549 ms
+64 bytes from 10.88.49.50: icmp_seq=12 ttl=64 time=0.488 ms
+64 bytes from 10.88.49.50: icmp_seq=13 ttl=64 time=0.458 ms
+64 bytes from 10.88.49.50: icmp_seq=14 ttl=64 time=0.549 ms
+64 bytes from 10.88.49.50: icmp_seq=15 ttl=64 time=0.519 ms
+64 bytes from 10.88.49.50: icmp_seq=16 ttl=64 time=0.946 ms
+64 bytes from 10.88.49.50: icmp_seq=17 ttl=64 time=0.519 ms
+64 bytes from 10.88.49.50: icmp_seq=18 ttl=64 time=0.671 ms
+64 bytes from 10.88.49.50: icmp_seq=19 ttl=64 time=0.763 ms
+64 bytes from 10.88.49.50: icmp_seq=20 ttl=64 time=0.763 ms
+64 bytes from 10.88.49.50: icmp_seq=21 ttl=64 time=0.549 ms
+64 bytes from 10.88.49.50: icmp_seq=22 ttl=64 time=0.702 ms
+64 bytes from 10.88.49.50: icmp_seq=23 ttl=64 time=0.702 ms
+64 bytes from 10.88.49.50: icmp_seq=24 ttl=64 time=0.641 ms
+<<<<<<  /tmp/ping_from_BX903J8AWV_to_BX903JMD8R.log  >>>>>>
+PING 10.68.56.82 (10.68.56.82) 56(84) bytes of data.
+64 bytes from 10.68.56.82: icmp_seq=1 ttl=64 time=1.49 ms
+64 bytes from 10.68.56.82: icmp_seq=2 ttl=64 time=0.580 ms
+64 bytes from 10.68.56.82: icmp_seq=3 ttl=64 time=0.702 ms
+64 bytes from 10.68.56.82: icmp_seq=4 ttl=64 time=0.641 ms
+64 bytes from 10.68.56.82: icmp_seq=5 ttl=64 time=0.702 ms
+64 bytes from 10.68.56.82: icmp_seq=6 ttl=64 time=0.702 ms
+64 bytes from 10.68.56.82: icmp_seq=7 ttl=64 time=0.610 ms
+64 bytes from 10.68.56.82: icmp_seq=8 ttl=64 time=1.22 ms
+64 bytes from 10.68.56.82: icmp_seq=9 ttl=64 time=0.977 ms
+64 bytes from 10.68.56.82: icmp_seq=10 ttl=64 time=1.40 ms
+64 bytes from 10.68.56.82: icmp_seq=11 ttl=64 time=1.19 ms
+64 bytes from 10.68.56.82: icmp_seq=12 ttl=64 time=0.732 ms
+64 bytes from 10.68.56.82: icmp_seq=13 ttl=64 time=0.488 ms
+64 bytes from 10.68.56.82: icmp_seq=14 ttl=64 time=0.550 ms
+64 bytes from 10.68.56.82: icmp_seq=15 ttl=64 time=0.518 ms
+64 bytes from 10.68.56.82: icmp_seq=16 ttl=64 time=0.610 ms
+64 bytes from 10.68.56.82: icmp_seq=17 ttl=64 time=0.671 ms
+64 bytes from 10.68.56.82: icmp_seq=18 ttl=64 time=0.671 ms
+64 bytes from 10.68.56.82: icmp_seq=19 ttl=64 time=0.733 ms
+64 bytes from 10.68.56.82: icmp_seq=20 ttl=64 time=0.763 ms
+64 bytes from 10.68.56.82: icmp_seq=21 ttl=64 time=0.702 ms
+64 bytes from 10.68.56.82: icmp_seq=22 ttl=64 time=0.763 ms
+64 bytes from 10.68.56.82: icmp_seq=23 ttl=64 time=0.672 ms
+64 bytes from 10.68.56.82: icmp_seq=24 ttl=64 time=0.763 ms
+<<<<<<  /tmp/ping_from_BX903J8X12_to_CB5A1TKGX8.log  >>>>>>
+PING 10.71.88.56 (10.71.88.56) 56(84) bytes of data.
+64 bytes from 10.71.88.56: icmp_seq=1 ttl=64 time=0.580 ms
+64 bytes from 10.71.88.56: icmp_seq=2 ttl=64 time=0.611 ms
+64 bytes from 10.71.88.56: icmp_seq=3 ttl=64 time=0.610 ms
+64 bytes from 10.71.88.56: icmp_seq=4 ttl=64 time=0.885 ms
+64 bytes from 10.71.88.56: icmp_seq=5 ttl=64 time=0.794 ms
+64 bytes from 10.71.88.56: icmp_seq=6 ttl=64 time=0.824 ms
+64 bytes from 10.71.88.56: icmp_seq=7 ttl=64 time=0.702 ms
+64 bytes from 10.71.88.56: icmp_seq=8 ttl=64 time=0.641 ms
+64 bytes from 10.71.88.56: icmp_seq=9 ttl=64 time=0.580 ms
+64 bytes from 10.71.88.56: icmp_seq=10 ttl=64 time=0.580 ms
+64 bytes from 10.71.88.56: icmp_seq=11 ttl=64 time=0.580 ms
+64 bytes from 10.71.88.56: icmp_seq=12 ttl=64 time=0.519 ms
+64 bytes from 10.71.88.56: icmp_seq=13 ttl=64 time=0.580 ms
+64 bytes from 10.71.88.56: icmp_seq=14 ttl=64 time=0.519 ms
+64 bytes from 10.71.88.56: icmp_seq=15 ttl=64 time=0.549 ms
+64 bytes from 10.71.88.56: icmp_seq=16 ttl=64 time=0.641 ms
+64 bytes from 10.71.88.56: icmp_seq=17 ttl=64 time=0.702 ms
+64 bytes from 10.71.88.56: icmp_seq=18 ttl=64 time=1.06 ms
+64 bytes from 10.71.88.56: icmp_seq=19 ttl=64 time=0.641 ms
+64 bytes from 10.71.88.56: icmp_seq=20 ttl=64 time=0.671 ms
+64 bytes from 10.71.88.56: icmp_seq=21 ttl=64 time=0.488 ms
+64 bytes from 10.71.88.56: icmp_seq=22 ttl=64 time=0.641 ms
+64 bytes from 10.71.88.56: icmp_seq=23 ttl=64 time=0.519 ms
+<<<<<<  /tmp/ping_from_BX903J8X12_to_BX903J8AWV.log  >>>>>>
+PING 10.65.87.86 (10.65.87.86) 56(84) bytes of data.
+64 bytes from 10.65.87.86: icmp_seq=1 ttl=64 time=0.611 ms
+64 bytes from 10.65.87.86: icmp_seq=2 ttl=64 time=0.855 ms
+64 bytes from 10.65.87.86: icmp_seq=3 ttl=64 time=0.916 ms
+64 bytes from 10.65.87.86: icmp_seq=4 ttl=64 time=0.885 ms
+64 bytes from 10.65.87.86: icmp_seq=5 ttl=64 time=0.794 ms
+64 bytes from 10.65.87.86: icmp_seq=6 ttl=64 time=1.03 ms
+64 bytes from 10.65.87.86: icmp_seq=7 ttl=64 time=0.580 ms
+64 bytes from 10.65.87.86: icmp_seq=8 ttl=64 time=0.580 ms
+64 bytes from 10.65.87.86: icmp_seq=9 ttl=64 time=0.580 ms
+64 bytes from 10.65.87.86: icmp_seq=10 ttl=64 time=0.580 ms
+64 bytes from 10.65.87.86: icmp_seq=11 ttl=64 time=1.25 ms
+64 bytes from 10.65.87.86: icmp_seq=12 ttl=64 time=0.549 ms
+64 bytes from 10.65.87.86: icmp_seq=13 ttl=64 time=0.458 ms
+64 bytes from 10.65.87.86: icmp_seq=14 ttl=64 time=0.580 ms
+64 bytes from 10.65.87.86: icmp_seq=15 ttl=64 time=0.519 ms
+64 bytes from 10.65.87.86: icmp_seq=16 ttl=64 time=0.580 ms
+64 bytes from 10.65.87.86: icmp_seq=17 ttl=64 time=0.519 ms
+64 bytes from 10.65.87.86: icmp_seq=18 ttl=64 time=0.671 ms
+64 bytes from 10.65.87.86: icmp_seq=19 ttl=64 time=0.671 ms
+64 bytes from 10.65.87.86: icmp_seq=20 ttl=64 time=0.732 ms
+64 bytes from 10.65.87.86: icmp_seq=21 ttl=64 time=0.671 ms
+64 bytes from 10.65.87.86: icmp_seq=22 ttl=64 time=0.671 ms
+64 bytes from 10.65.87.86: icmp_seq=23 ttl=64 time=0.641 ms
+<<<<<<  /tmp/ping_from_BX903J8X12_to_BX903JMD8R.log  >>>>>>
+PING 10.68.56.82 (10.68.56.82) 56(84) bytes of data.
+64 bytes from 10.68.56.82: icmp_seq=1 ttl=64 time=1.80 ms
+64 bytes from 10.68.56.82: icmp_seq=2 ttl=64 time=1.37 ms
+64 bytes from 10.68.56.82: icmp_seq=3 ttl=64 time=1.03 ms
+64 bytes from 10.68.56.82: icmp_seq=4 ttl=64 time=0.976 ms
+64 bytes from 10.68.56.82: icmp_seq=5 ttl=64 time=0.946 ms
+64 bytes from 10.68.56.82: icmp_seq=6 ttl=64 time=0.488 ms
+64 bytes from 10.68.56.82: icmp_seq=7 ttl=64 time=0.824 ms
+64 bytes from 10.68.56.82: icmp_seq=8 ttl=64 time=0.763 ms
+64 bytes from 10.68.56.82: icmp_seq=9 ttl=64 time=0.793 ms
+64 bytes from 10.68.56.82: icmp_seq=10 ttl=64 time=0.733 ms
+64 bytes from 10.68.56.82: icmp_seq=11 ttl=64 time=0.549 ms
+64 bytes from 10.68.56.82: icmp_seq=12 ttl=64 time=0.580 ms
+64 bytes from 10.68.56.82: icmp_seq=13 ttl=64 time=0.580 ms
+64 bytes from 10.68.56.82: icmp_seq=14 ttl=64 time=0.702 ms
+64 bytes from 10.68.56.82: icmp_seq=15 ttl=64 time=0.550 ms
+64 bytes from 10.68.56.82: icmp_seq=16 ttl=64 time=0.732 ms
+64 bytes from 10.68.56.82: icmp_seq=17 ttl=64 time=0.732 ms
+64 bytes from 10.68.56.82: icmp_seq=18 ttl=64 time=0.671 ms
+64 bytes from 10.68.56.82: icmp_seq=19 ttl=64 time=0.732 ms
+64 bytes from 10.68.56.82: icmp_seq=20 ttl=64 time=0.733 ms
+64 bytes from 10.68.56.82: icmp_seq=21 ttl=64 time=0.672 ms
+64 bytes from 10.68.56.82: icmp_seq=22 ttl=64 time=0.671 ms
+<<<<<<  /tmp/ping_from_BX903JMD8R_to_CB5A1TKGX8.log  >>>>>>
+PING 10.71.88.56 (10.71.88.56) 56(84) bytes of data.
+64 bytes from 10.71.88.56: icmp_seq=1 ttl=64 time=0.672 ms
+64 bytes from 10.71.88.56: icmp_seq=2 ttl=64 time=0.732 ms
+64 bytes from 10.71.88.56: icmp_seq=3 ttl=64 time=0.672 ms
+64 bytes from 10.71.88.56: icmp_seq=4 ttl=64 time=0.610 ms
+64 bytes from 10.71.88.56: icmp_seq=5 ttl=64 time=0.671 ms
+64 bytes from 10.71.88.56: icmp_seq=6 ttl=64 time=0.580 ms
+64 bytes from 10.71.88.56: icmp_seq=7 ttl=64 time=0.611 ms
+64 bytes from 10.71.88.56: icmp_seq=8 ttl=64 time=0.580 ms
+64 bytes from 10.71.88.56: icmp_seq=9 ttl=64 time=0.580 ms
+64 bytes from 10.71.88.56: icmp_seq=10 ttl=64 time=0.580 ms
+64 bytes from 10.71.88.56: icmp_seq=11 ttl=64 time=0.550 ms
+64 bytes from 10.71.88.56: icmp_seq=12 ttl=64 time=0.611 ms
+64 bytes from 10.71.88.56: icmp_seq=13 ttl=64 time=0.854 ms
+64 bytes from 10.71.88.56: icmp_seq=14 ttl=64 time=1.49 ms
+64 bytes from 10.71.88.56: icmp_seq=15 ttl=64 time=0.611 ms
+64 bytes from 10.71.88.56: icmp_seq=16 ttl=64 time=0.549 ms
+64 bytes from 10.71.88.56: icmp_seq=17 ttl=64 time=0.580 ms
+64 bytes from 10.71.88.56: icmp_seq=18 ttl=64 time=0.702 ms
+64 bytes from 10.71.88.56: icmp_seq=19 ttl=64 time=0.793 ms
+64 bytes from 10.71.88.56: icmp_seq=20 ttl=64 time=0.672 ms
+64 bytes from 10.71.88.56: icmp_seq=21 ttl=64 time=0.671 ms
+64 bytes from 10.71.88.56: icmp_seq=22 ttl=64 time=0.641 ms
+<<<<<<  /tmp/ping_from_BX903JMD8R_to_BX903J8AWV.log  >>>>>>
+PING 10.65.87.86 (10.65.87.86) 56(84) bytes of data.
+64 bytes from 10.65.87.86: icmp_seq=1 ttl=64 time=0.641 ms
+64 bytes from 10.65.87.86: icmp_seq=2 ttl=64 time=0.641 ms
+64 bytes from 10.65.87.86: icmp_seq=3 ttl=64 time=0.610 ms
+64 bytes from 10.65.87.86: icmp_seq=4 ttl=64 time=0.580 ms
+64 bytes from 10.65.87.86: icmp_seq=5 ttl=64 time=0.641 ms
+64 bytes from 10.65.87.86: icmp_seq=6 ttl=64 time=0.794 ms
+64 bytes from 10.65.87.86: icmp_seq=7 ttl=64 time=0.763 ms
+64 bytes from 10.65.87.86: icmp_seq=8 ttl=64 time=0.855 ms
+64 bytes from 10.65.87.86: icmp_seq=9 ttl=64 time=0.763 ms
+64 bytes from 10.65.87.86: icmp_seq=10 ttl=64 time=0.549 ms
+64 bytes from 10.65.87.86: icmp_seq=11 ttl=64 time=0.550 ms
+64 bytes from 10.65.87.86: icmp_seq=12 ttl=64 time=0.579 ms
+64 bytes from 10.65.87.86: icmp_seq=13 ttl=64 time=0.824 ms
+64 bytes from 10.65.87.86: icmp_seq=14 ttl=64 time=0.549 ms
+64 bytes from 10.65.87.86: icmp_seq=15 ttl=64 time=0.702 ms
+64 bytes from 10.65.87.86: icmp_seq=16 ttl=64 time=0.611 ms
+64 bytes from 10.65.87.86: icmp_seq=17 ttl=64 time=0.549 ms
+64 bytes from 10.65.87.86: icmp_seq=18 ttl=64 time=0.549 ms
+64 bytes from 10.65.87.86: icmp_seq=19 ttl=64 time=0.671 ms
+64 bytes from 10.65.87.86: icmp_seq=20 ttl=64 time=0.671 ms
+64 bytes from 10.65.87.86: icmp_seq=21 ttl=64 time=0.671 ms
+<<<<<<  /tmp/ping_from_BX903JMD8R_to_BX903J8X12.log  >>>>>>
+PING 10.88.49.50 (10.88.49.50) 56(84) bytes of data.
+64 bytes from 10.88.49.50: icmp_seq=1 ttl=64 time=0.701 ms
+64 bytes from 10.88.49.50: icmp_seq=2 ttl=64 time=0.641 ms
+64 bytes from 10.88.49.50: icmp_seq=3 ttl=64 time=0.580 ms
+64 bytes from 10.88.49.50: icmp_seq=4 ttl=64 time=0.580 ms
+64 bytes from 10.88.49.50: icmp_seq=5 ttl=64 time=0.794 ms
+64 bytes from 10.88.49.50: icmp_seq=6 ttl=64 time=0.854 ms
+64 bytes from 10.88.49.50: icmp_seq=7 ttl=64 time=0.793 ms
+64 bytes from 10.88.49.50: icmp_seq=8 ttl=64 time=0.732 ms
+64 bytes from 10.88.49.50: icmp_seq=9 ttl=64 time=0.579 ms
+64 bytes from 10.88.49.50: icmp_seq=10 ttl=64 time=0.579 ms
+64 bytes from 10.88.49.50: icmp_seq=11 ttl=64 time=1.15 ms
+64 bytes from 10.88.49.50: icmp_seq=12 ttl=64 time=0.518 ms
+64 bytes from 10.88.49.50: icmp_seq=13 ttl=64 time=0.641 ms
+64 bytes from 10.88.49.50: icmp_seq=14 ttl=64 time=0.702 ms
+64 bytes from 10.88.49.50: icmp_seq=15 ttl=64 time=0.611 ms
+64 bytes from 10.88.49.50: icmp_seq=16 ttl=64 time=0.702 ms
+64 bytes from 10.88.49.50: icmp_seq=17 ttl=64 time=0.671 ms
+64 bytes from 10.88.49.50: icmp_seq=18 ttl=64 time=0.671 ms
+64 bytes from 10.88.49.50: icmp_seq=19 ttl=64 time=0.671 ms
+64 bytes from 10.88.49.50: icmp_seq=20 ttl=64 time=0.672 ms
+64 bytes from 10.88.49.50: icmp_seq=21 ttl=64 time=0.672 ms
+adb -s CB5A1TKGX8 shell killall ping
+adb -s BX903J8AWV shell killall ping
+adb -s BX903J8X12 shell killall ping
+adb -s BX903JMD8R shell killall ping

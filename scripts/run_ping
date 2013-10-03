@@ -1,0 +1,33 @@
+#!/bin/bash
+
+D=$(dirname $(readlink -f ${BASH_SOURCE}))
+source "$D/setup_env.sh"
+
+reboot_phones
+join_mesh 36 HT20
+
+logs=`tempfile`
+trap "rm $logs" EXIT
+
+for serial in `list_xperiaz`; do
+    for other_serial in `list_xperiaz`; do
+        if [[ $serial == $other_serial ]]; then
+            continue
+        fi
+        ip=$(gen_ip $other_serial)
+        log="/tmp/ping_from_${serial}_to_${other_serial}.log"
+        trap "rm $log" EXIT
+        echo $log >>$logs
+        xterm -e "sh -c \"adb -s $serial shell ping $ip | tee $log\"" &
+        sleep 0.5
+    done
+done
+
+sleep_countdown 20 "Waiting for some data from ping"
+
+for log in `cat $logs`; do
+    echo '<<<<<< ' $log ' >>>>>>'
+    cat $log
+done
+
+adbs shell killall ping
