@@ -6,8 +6,8 @@ source "$D/setup_env.sh"
 reboot_phones
 join_mesh 36 HT20
 
-logs=`tempfile`
-trap "rm $logs" EXIT
+logs=`tempfile -p r_p_`
+add_on_exit "rm $logs"
 
 for serial in `list_xperiaz`; do
     for other_serial in `list_xperiaz`; do
@@ -16,7 +16,7 @@ for serial in `list_xperiaz`; do
         fi
         ip=$(gen_ip $other_serial)
         log="/tmp/ping_from_${serial}_to_${other_serial}.log"
-        trap "rm $log" EXIT
+        add_on_exit "rm $log"
         echo $log >>$logs
         xterm -e "sh -c \"adb -s $serial shell ping $ip | tee $log\"" &
         sleep 0.5
