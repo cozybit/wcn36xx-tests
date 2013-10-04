@@ -3,6 +3,25 @@
 D=$(dirname $(readlink -f ${BASH_SOURCE}))
 source "$D/setup_env.sh"
 
+usage() {
+cat << EOF
+usage: $0 [<OPTIONS>]
+
+Runs a ping test between ALL Xperia Z devices connected to the computer.
+
+OPTIONS:
+   -h   Show this message.
+EOF
+}
+
+# parse the incoming parameters
+while getopts "h" options; do
+    case $options in
+        h ) usage; exit 0;;
+        * ) usage; exit 1;;
+    esac
+done
+
 reboot_phones
 join_mesh 36 HT20
 

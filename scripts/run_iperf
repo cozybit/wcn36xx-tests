@@ -3,6 +3,26 @@
 D=$(dirname $(readlink -f ${BASH_SOURCE}))
 source "$D/setup_env.sh"
 
+usage() {
+cat << EOF
+usage: $0 [<OPTIONS>]
+
+Generates iperf test results, designed to run on any TWO Xperia Z devices
+connected to the computer.
+
+OPTIONS:
+   -h   Show this message.
+EOF
+}
+
+# parse the incoming parameters
+while getopts "h" options; do
+    case $options in
+        h ) usage; exit 0;;
+        * ) usage; exit 1;;
+    esac
+done
+
 run_iperf() {
 
     local ghz=$1
