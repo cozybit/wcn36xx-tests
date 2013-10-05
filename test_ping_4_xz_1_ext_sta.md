@@ -6,6 +6,8 @@ running the `run_extsta_ping_test` script.
 
 ## Mesh configuration
 
+This test was *not* performed in an RF chamber.
+
 ```text
 Interface mesh0
 	ifindex 17
