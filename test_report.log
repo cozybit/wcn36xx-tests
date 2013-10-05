@@ -1,3 +1,18 @@
+# Introduction
+
+This is a perfomance test using iperf, the test was between 2 Xperia Z phones
+operating inside of an RF chamber.
+
+The iperf test was performed on the following channel configurations:
+
+- 2.4 GHz, channel 11, legacy
+- 2.4 GHz, channel 11, HT20
+- 5.0 GHz, channel 36, legacy
+- 5.0 GHz, channel 36, HT20
+
+## Test results
+
+```text
 Changing to 5 GHz, channel 36, HT20
 (PARALLEL) adb -s BX903J8X12 reboot
 (PARALLEL) adb -s BX903J8AWV reboot
@@ -278,3 +293,4 @@ UDP buffer size:  160 KByte (default)
 [  3] Server Report:
 [  3]  0.0-10.6 sec  5.71 MBytes  4.53 Mbits/sec  10.228 ms 3884/ 7960 (49%)
 [  3]  0.0-10.6 sec  322 datagrams received out-of-order
+```
