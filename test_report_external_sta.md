@@ -15,6 +15,8 @@ Bus 001 Device 019: ID 148f:5572 Ralink Technology, Corp.
 
 ## Test configuration
 
+Performed inside an RF chamber.
+
 - Channel 36 (HT20)
 - Mesh ID: xz
 
