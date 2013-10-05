@@ -1,0 +1,49 @@
+#!/bin/bash
+
+source `dirname ${0}`/setup_env.sh
+
+PHY="$1"
+
+capture_uptime
+ADBS_PARALLEL=1 adbs reboot
+wait_for_adbs
+
+echo_eval sudo iw phy $PHY interface add mesh0 type mp
+echo_eval sudo iw mesh0 set channel 11
+echo_eval sudo ip link set mesh0 up
+echo_eval sudo iw mesh0 mesh join xz
+sleep 1
+
+echo_eval adbs shell iw phy0 interface add mesh0 type mp
+sleep 1
+echo_eval adbs shell iw mesh0 set channel 11
+sleep 1
+echo_eval adbs shell ip link set mesh0 up
+sleep 1
+echo_eval adbs shell iw mesh0 mesh join xz
+sleep 1
+
+count=1
+for serial in `list_xperiaz`; do
+    echo_eval adb -s $serial shell ifconfig mesh0 10.9.9.$count
+    count=$(( $count + 1 ))
+done
+
+echo_eval sudo ifconfig mesh0 10.9.9.$count
+sleep 1
+
+count=`list_xperiaz | wc -l`
+
+for ip in `seq $count`; do
+    echo_eval ping -I mesh0 -c 1 10.9.9.$ip;
+    sleep 1;
+done
+
+count=1
+for serial in `list_xperiaz`; do
+    ips=`echo 1 2 3 4 5 | sed s/$count//`
+    echo_eval adb -s $serial shell "for ip in $ips; do ping -c 1 10.9.9.\$ip; sleep 1; done"
+    count=$(( $count + 1 ))
+done
+
+echo_eval sudo iw dev mesh0 del

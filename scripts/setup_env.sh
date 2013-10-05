@@ -197,3 +197,8 @@ function add_on_exit()
         trap on_exit EXIT
     fi
 }
+
+function echo_eval() {
+    echo "$@"
+    "$@"
+}
