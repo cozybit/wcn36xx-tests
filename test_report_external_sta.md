@@ -113,10 +113,6 @@ UDP buffer size:  208 KByte (default)
 [  3]  0.0-10.0 sec  10 datagrams received out-of-order
 ```
 
-## Internal-STA
-
-Internal-STA 
-
 ## Appendix: external STA wiphy information
 
 ```text
