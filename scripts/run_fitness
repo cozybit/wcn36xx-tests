@@ -1,0 +1,59 @@
+#!/bin/bash
+
+D=$(dirname $(readlink -f ${BASH_SOURCE}))
+source "$D/setup_env.sh"
+
+usage() {
+cat << EOF
+usage: $0 [<OPTIONS>]
+
+Generates iperf test results, designed to run on any TWO Xperia Z devices
+connected to the computer.
+
+OPTIONS:
+   -h   Show this message.
+EOF
+}
+
+# parse the incoming parameters
+while getopts "h" options; do
+    case $options in
+        h ) usage; exit 0;;
+        * ) usage; exit 1;;
+    esac
+done
+
+run_iperf() {
+
+    local ghz=$1
+
+    local serials=$(adbs shell getprop ro.serialno)
+    
+    local serial1=$(echo $serials | cut -d' ' -f1)
+    local serial2=$(echo $serials | cut -d' ' -f2)
+
+    local ip1=$(gen_ip $serial1)
+    local ip2=$(gen_ip $serial2)
+
+    echo "Starting server on $serial1/$ip1"
+
+    log1="/tmp/iperf_server_$serial1.$ghz.log"
+    xterm -e "sh -c \"adb -s $serial1 shell iperf -s -i 1 | tee $log1\"" &
+
+    echo "Starting client on $serial2/$ip2"
+
+    log2="/tmp/iperf_client_$serial2.$ghz.log"
+    xterm -e "sh -c \"adb -s $serial2 shell iperf -c $ip1 -i 1 -t 300 | tee $log2\""
+
+    # Twice to make sure iperf quits!
+    adb -s $serial1 shell /system/xbin/killall iperf
+    adb -s $serial1 shell /system/xbin/killall iperf
+
+    cat $log1 $log2
+}
+
+echo "Changing to 5 GHz, channel 36, legacy"
+
+reboot_phones
+join_mesh 36
+run_iperf legacy_5GHz
