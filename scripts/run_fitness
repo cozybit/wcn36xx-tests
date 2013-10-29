@@ -43,7 +43,7 @@ run_iperf() {
     echo "Starting client on $serial2/$ip2"
 
     log2="/tmp/iperf_client_$serial2.$ghz.log"
-    xterm -e "sh -c \"adb -s $serial2 shell iperf -c $ip1 -i 1 -t 300 | tee $log2\""
+    xterm -e "sh -c \"adb -s $serial2 shell iperf -c $ip1 -i 1 -t 600 | tee $log2\""
 
     # Twice to make sure iperf quits!
     adb -s $serial1 shell /system/xbin/killall iperf
