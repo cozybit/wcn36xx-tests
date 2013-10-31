@@ -22,7 +22,7 @@ while getopts "h" options; do
     esac
 done
 
-CHANNEL=4
+CHANNEL=5
 HT="NO_HT"
 
 reboot_phones
@@ -33,9 +33,9 @@ serial1=$(echo $serials | cut -d' ' -f1)
 serial2=$(echo $serials | cut -d' ' -f2)
 serial3=$(echo $serials | cut -d' ' -f3)
 
-ip1=$(join_mesh $CHANNEL $HT $serial1)
-ip2=$(join_mesh $CHANNEL $HT $serial2)
-ip3=$(join_mesh $CHANNEL $HT $serial3)
+ip1=$(join_mesh_meshkit $CHANNEL $HT $serial1)
+ip2=$(join_mesh_meshkit $CHANNEL $HT $serial2)
+ip3=$(join_mesh_meshkit $CHANNEL $HT $serial3)
 sleep 2
 
 #ip1=$(gen_ip $serial1)
@@ -53,11 +53,11 @@ echo_eval adb -s $serial3 shell ping -c3 $ip2 &
 
 wait
 
-adbs shell iw mesh0 mpath dump
+adbs shell iw dev mesh0 mpath dump
 
 reboot_one_phone $serial1
 
-join_mesh $CHANNEL $HT $serial1 || die "joining mesh failed"
+join_mesh_meshkit $CHANNEL $HT $serial1 || die "joining mesh failed"
 sleep 2
 
 echo_eval adb -s $serial1 shell ping -c3 $ip2 

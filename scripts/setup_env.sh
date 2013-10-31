@@ -167,37 +167,43 @@ join_mesh()
     local ht=$2
     local serial=$3
 
-    adb=adbs
-    if [[ -n $serial ]]; then
-        adb="echo_eval adb -s $serial"
-    fi
-
     [[ "NO_HT" == "$ht" ]] && ht=
 
-    sleep 1
-    
-    #eval $adb shell iw reg set US
-    #sleep 0.5
-    #eval $adb shell iw phy phy0 interface add mesh0 type mp
-    #sleep 0.5
-    #eval $adb shell iw dev mesh0 set channel $channel $ht
-    #sleep 0.5
-    #eval $adb shell ip link set mesh0 up
-    #sleep 0.5
-    #eval $adb shell iw dev mesh0 mesh join xz
-    #sleep 0.5
-    #if [[ -n $serial ]]; then
-        #echo_eval adb -s $serial shell ifconfig mesh0 $(gen_ip $serial)
-    #else
-        #adbs shell ifconfig mesh0 @IP@
-    #fi
+    (
+    echo_eval adb -s $serial shell iw reg set US
+    sleep 0.5
+    echo_eval adb -s $serial shell iw phy phy0 interface add mesh0 type mp
+    sleep 0.5
+    echo_eval adb -s $serial shell iw dev mesh0 set channel $channel $ht
+    sleep 0.5
+    echo_eval adb -s $serial shell ip link set mesh0 up
+    sleep 0.5
+    echo_eval adb -s $serial shell iw dev mesh0 mesh join COZYMESH
+    sleep 0.5
+    echo_eval adb -s $serial shell ifconfig mesh0 $(gen_ip $serial)
+    sleep 0.5
+    ) 1>&2
 
-    adb -s $serial shell mesh mesh0 up xz 5 NO_HT 2>&1
-    sleep 0.5
-    adb -s $serial shell mesh mesh0 up xz 5 NO_HT 2>&1
-    sleep 0.5
-    adb -s $serial shell mesh mesh0 up xz 5 NO_HT 2>&1
-    sleep 0.5
+    adb -s $serial shell ip addr show mesh0|sed 's#^M##'|head -3|tail -1|sed 's#.*inet \(.*\)/8 .*#\1#'
+}
+
+join_mesh_meshkit()
+{
+    local channel=$1
+    local ht=$2
+    local serial=$3
+
+    (
+        while `true`; do
+            ex=$(adb -s $serial shell sh -c "mesh mesh0 up COZYMESH $channel $ht &>/dev/null && echo \$?" | sed 's###')
+            if [[ "$ex" != "0" ]]; then
+                sleep 0.5;
+            else
+                break;
+            fi
+        done
+
+    ) 1>&2
 
     adb -s $serial shell ip addr show mesh0|sed 's#^M##'|head -3|tail -1|sed 's#.*inet \(.*\)/8 .*#\1#'
 }
