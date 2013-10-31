@@ -161,6 +161,11 @@ wait_for_adbs() {
     done
 }
 
+get_ip()
+{
+    adb -s $1 shell ip addr show mesh0|sed 's#^M##'|head -3|tail -1|sed 's#.*inet \(.*\)/8 .*#\1#'
+}
+
 join_mesh()
 {
     local channel=$1
@@ -184,7 +189,7 @@ join_mesh()
     sleep 0.5
     ) 1>&2
 
-    adb -s $serial shell ip addr show mesh0|sed 's#^M##'|head -3|tail -1|sed 's#.*inet \(.*\)/8 .*#\1#'
+    get_ip $serial
 }
 
 join_mesh_meshkit()
@@ -205,7 +210,7 @@ join_mesh_meshkit()
 
     ) 1>&2
 
-    adb -s $serial shell ip addr show mesh0|sed 's#^M##'|head -3|tail -1|sed 's#.*inet \(.*\)/8 .*#\1#'
+    get_ip $serial
 }
 
 reboot_one_phone()
