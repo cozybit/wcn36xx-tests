@@ -121,10 +121,19 @@ wait_for_adbs() {
     trap "IFS=$IFS" EXIT
     IFS=$'\n'
 
+    if [[ -n $1 ]]; then
+        local onlyserial=$1
+        echo "Waiting for one phone to reboot: $onlyserial"
+    fi
+
     for xz in `cat $UPTIME_FILE`; do
 
         local serial=`echo $xz | awk '{print $1}'`
         local uptime=`echo $xz | awk '{print $2}'`
+
+        if [[ -n "$onlyserial" ]] && [[ "$onlyserial" != "$serial" ]]; then
+            continue
+        fi
 
         echo "Serial: $serial, last uptime: $uptime"
 
@@ -156,19 +165,51 @@ join_mesh()
 {
     local channel=$1
     local ht=$2
+    local serial=$3
 
-    adbs shell iw reg set US
+    adb=adbs
+    if [[ -n $serial ]]; then
+        adb="echo_eval adb -s $serial"
+    fi
+
+    [[ "NO_HT" == "$ht" ]] && ht=
+
+    sleep 1
+    
+    #eval $adb shell iw reg set US
+    #sleep 0.5
+    #eval $adb shell iw phy phy0 interface add mesh0 type mp
+    #sleep 0.5
+    #eval $adb shell iw dev mesh0 set channel $channel $ht
+    #sleep 0.5
+    #eval $adb shell ip link set mesh0 up
+    #sleep 0.5
+    #eval $adb shell iw dev mesh0 mesh join xz
+    #sleep 0.5
+    #if [[ -n $serial ]]; then
+        #echo_eval adb -s $serial shell ifconfig mesh0 $(gen_ip $serial)
+    #else
+        #adbs shell ifconfig mesh0 @IP@
+    #fi
+
+    adb -s $serial shell mesh mesh0 up xz 5 NO_HT 2>&1
     sleep 0.5
-    adbs shell iw phy phy0 interface add mesh0 type mp
+    adb -s $serial shell mesh mesh0 up xz 5 NO_HT 2>&1
     sleep 0.5
-    adbs shell iw dev mesh0 set channel $channel $ht
+    adb -s $serial shell mesh mesh0 up xz 5 NO_HT 2>&1
     sleep 0.5
-    adbs shell ip link set mesh0 up
-    sleep 0.5
-    adbs shell iw dev mesh0 mesh join xz
-    sleep 0.5
-    adbs shell ifconfig mesh0 @IP@
-    sleep 0.5
+
+    adb -s $serial shell ip addr show mesh0|sed 's#^M##'|head -3|tail -1|sed 's#.*inet \(.*\)/8 .*#\1#'
+}
+
+reboot_one_phone()
+{
+    local serial=$1
+    [[ -n $serial ]] || die 'reboot_one_phone: serial number not specified'
+    capture_uptime
+    adb -s $serial reboot
+    wait_for_adbs $serial
+    adb -s $serial 'wait-for-device'
 }
 
 reboot_phones()

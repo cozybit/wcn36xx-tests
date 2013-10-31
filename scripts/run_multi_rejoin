@@ -1,0 +1,72 @@
+#!/bin/bash
+
+D=$(dirname $(readlink -f ${BASH_SOURCE}))
+source "$D/setup_env.sh"
+
+usage() {
+cat << EOF
+usage: $0 [<OPTIONS>]
+
+Runs a multi-peer mesh re-join test.
+
+OPTIONS:
+   -h   Show this message.
+EOF
+}
+
+# parse the incoming parameters
+while getopts "h" options; do
+    case $options in
+        h ) usage; exit 0;;
+        * ) usage; exit 1;;
+    esac
+done
+
+CHANNEL=4
+HT="NO_HT"
+
+reboot_phones
+
+serials=$(adbs shell getprop ro.serialno)
+
+serial1=$(echo $serials | cut -d' ' -f1)
+serial2=$(echo $serials | cut -d' ' -f2)
+serial3=$(echo $serials | cut -d' ' -f3)
+
+ip1=$(join_mesh $CHANNEL $HT $serial1)
+ip2=$(join_mesh $CHANNEL $HT $serial2)
+ip3=$(join_mesh $CHANNEL $HT $serial3)
+sleep 2
+
+#ip1=$(gen_ip $serial1)
+#ip2=$(gen_ip $serial2)
+#ip3=$(gen_ip $serial3)
+
+echo_eval adb -s $serial1 shell ping -c3 $ip2 &
+echo_eval adb -s $serial1 shell ping -c3 $ip3 &
+
+echo_eval adb -s $serial2 shell ping -c3 $ip1 &
+echo_eval adb -s $serial2 shell ping -c3 $ip3 &
+
+echo_eval adb -s $serial3 shell ping -c3 $ip1 &
+echo_eval adb -s $serial3 shell ping -c3 $ip2 &
+
+wait
+
+adbs shell iw mesh0 mpath dump
+
+reboot_one_phone $serial1
+
+join_mesh $CHANNEL $HT $serial1 || die "joining mesh failed"
+sleep 2
+
+echo_eval adb -s $serial1 shell ping -c3 $ip2 
+echo_eval adb -s $serial1 shell ping -c3 $ip3 
+
+echo_eval adb -s $serial2 shell ping -c3 $ip1 
+echo_eval adb -s $serial2 shell ping -c3 $ip3 
+
+echo_eval adb -s $serial3 shell ping -c3 $ip1 
+echo_eval adb -s $serial3 shell ping -c3 $ip2 
+
+wait
