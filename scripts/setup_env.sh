@@ -41,6 +41,10 @@ list_xperiaz() {
     | egrep "${XZ_SERIAL}"
 }
 
+adbs_p() {
+    ADBS_PARALLEL=1 adbs ${*}
+}
+
 adbs() {
     for dev in `list_xperiaz`; do
         local ip=$(gen_ip $dev)
@@ -53,6 +57,7 @@ adbs() {
             eval "adb -s $dev $cmd" &>/dev/null &
         fi
     done
+    wait
 }
 
 gen_ip()
