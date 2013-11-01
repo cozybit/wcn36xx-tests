@@ -10,13 +10,21 @@ usage: $0 [<OPTIONS>]
 Runs a multi-peer mesh re-join test.
 
 OPTIONS:
-   -h   Show this message.
-   -m   Use meshkit (otherwise uses iw)
-   -l   Use "mesh leave" for iw, for meshkit this does nothing
-   -c   Close the door
-   -d   Try to 'fix' the rejoin problem by recreating the interface
-   -b   Leave ping running in the background
-   -t   Always use a "2nd" interface
+   -h            Show this message.
+   -m            Use meshkit (otherwise uses iw)
+   -l            Use "mesh leave" for iw, for meshkit this does nothing
+   -c <SERIAL>   Manually move a phone out of range, e.g. close rf chamber door
+   -d            Try to 'fix' the rejoin problem by recreating the interface
+   -b            Leave ping running in the background
+   -t            Always use a "2nd" interface
+
+EXAMPLES:
+   ./scripts/run_multi_rejoin -m
+   ./scripts/run_multi_rejoin -l
+   ./scripts/run_multi_rejoin       -c CB5A1TQ0WY
+   ./scripts/run_multi_rejoin -d    -c CB5A1TQ0WY
+   ./scripts/run_multi_rejoin -d -t -c CB5A1TQ0WY
+   ./scripts/run_multi_rejoin    -t -c CB5A1TQ0WY
 EOF
 }
 
@@ -28,12 +36,12 @@ DELIFACE=
 PINGBG=
 
 # parse the incoming parameters
-while getopts "hmlcdt" options; do
+while getopts "hmlc:dt" options; do
     case $options in
         h ) usage; exit 0;;
         m ) MESHKIT=1 ;;
         l ) LEAVE=1;;
-        c ) CLOSETHEDOOR=1;;
+        c ) CLOSETHEDOOR=$OPTARG;;
         d ) DELIFACE=1;;
         p ) PINGBG=1;;
         t ) SECONDIFACE=1;;
@@ -47,11 +55,17 @@ HT="NO_HT"
 reboot_phones
 sleep_countdown 10
 
-serials=$(adbs shell getprop ro.serialno)
-
-serial1=$(echo $serials | cut -d' ' -f1)
-serial2=$(echo $serials | cut -d' ' -f2)
-serial3=$(echo $serials | cut -d' ' -f3)
+if [[ -n $CLOSETHEDOOR ]]; then
+    serials=$(adbs shell getprop ro.serialno|grep -v $CLOSETHEDOOR)
+    serial1=$CLOSETHEDOOR
+    serial2=$(echo $serials | cut -d' ' -f1)
+    serial3=$(echo $serials | cut -d' ' -f2)
+else
+    serials=$(adbs shell getprop ro.serialno)
+    serial1=$(echo $serials | cut -d' ' -f1)
+    serial2=$(echo $serials | cut -d' ' -f2)
+    serial3=$(echo $serials | cut -d' ' -f3)
+fi
 
 if [[ -n $MESHKIT ]]; then
     meshup=join_mesh_meshkit
@@ -105,21 +119,32 @@ else
 
     elif [[ -n $CLOSETHEDOOR ]]; then
         echo
-        echo "!!!!!!!!!!!!!!!!!!!!"
-        echo "!! CLOSE THE DOOR !!"
-        echo "!!!!!!!!!!!!!!!!!!!!"
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        echo "!! MOVE $serial1 OUT OF RANGE !!"
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         echo
 
+        echo "Press <enter> when done."
         read
 
         sleep_countdown 5
 
+        echo "All of these ping commands should fail:"
+
+        echo_eval adb -s $serial1 shell ping -c20 -f $ip2 &
+        echo_eval adb -s $serial1 shell ping -c20 -f $ip3 &
+        echo_eval adb -s $serial2 shell ping -c20 -f $ip1 &
+        echo_eval adb -s $serial3 shell ping -c20 -f $ip1 &
+
+        wait
+
         echo
-        echo "!!!!!!!!!!!!!!!!!!!!"
-        echo "!! OPEN THE DOOR  !!"
-        echo "!!!!!!!!!!!!!!!!!!!!"
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        echo "!! MOVE $serial1 IN RANGE, RECONNECT USB !!"
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         echo
 
+        echo "Press <enter> when done."
         read
 
         if [[ -z $DELIFACE ]]; then
