@@ -5,6 +5,8 @@ OUT=$ROOT/out/xperiaz
 KOUT=$OUT/kernel.build
 BP_OUT=$OUT/backports.build
 
+MESHID=xzmesh
+
 export PATH=$ROOT/prebuilts:$PATH
 
 source $ROOT/CONFIG
@@ -171,22 +173,30 @@ join_mesh()
     local channel=$1
     local ht=$2
     local serial=$3
+    local leave=$4
 
     [[ "NO_HT" == "$ht" ]] && ht=
 
     (
-    echo_eval adb -s $serial shell iw reg set US
-    sleep 0.5
-    echo_eval adb -s $serial shell iw phy phy0 interface add mesh0 type mp
-    sleep 0.5
-    echo_eval adb -s $serial shell iw dev mesh0 set channel $channel $ht
-    sleep 0.5
-    echo_eval adb -s $serial shell ip link set mesh0 up
-    sleep 0.5
-    echo_eval adb -s $serial shell iw dev mesh0 mesh join COZYMESH
-    sleep 0.5
-    echo_eval adb -s $serial shell ifconfig mesh0 $(gen_ip $serial)
-    sleep 0.5
+        if [[ -z $leave ]]; then
+            echo_eval adb -s $serial shell iw reg set US
+            sleep 0.5
+            echo_eval adb -s $serial shell iw phy phy0 interface add mesh0 type mp
+            sleep 0.5
+            echo_eval adb -s $serial shell iw dev mesh0 set channel $channel $ht
+            sleep 0.5
+            echo_eval adb -s $serial shell ip link set mesh0 up
+            sleep 0.5
+        fi
+
+        echo_eval adb -s $serial shell iw dev mesh0 mesh join $MESHID
+        sleep 0.5
+
+        if [[ -z $leave ]]; then
+            echo_eval adb -s $serial shell ifconfig mesh0 $(gen_ip $serial)
+            sleep 0.5
+        fi
+
     ) 1>&2
 
     get_ip $serial
@@ -197,19 +207,9 @@ join_mesh_meshkit()
     local channel=$1
     local ht=$2
     local serial=$3
+    local leave=$4 # not used
 
-    (
-        while `true`; do
-            ex=$(adb -s $serial shell sh -c "mesh mesh0 up COZYMESH $channel $ht &>/dev/null && echo \$?" | sed 's###')
-            if [[ "$ex" != "0" ]]; then
-                sleep 0.5;
-            else
-                break;
-            fi
-        done
-
-    ) 1>&2
-
+    adb -s $serial shell mesh mesh0 up $MESHID $channel $ht 1>&2
     get_ip $serial
 }
 
@@ -250,7 +250,8 @@ function add_on_exit()
     fi
 }
 
-function echo_eval() {
+function echo_eval() 
+{
     echo "$@"
     "$@"
 }
