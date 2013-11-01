@@ -1,0 +1,28 @@
+#!/bin/bash
+
+D=$(dirname $(readlink -f ${BASH_SOURCE}))
+source "$D/setup_env.sh"
+
+serials=$(adbs shell getprop ro.serialno)
+
+s1=$(echo $serials | cut -d' ' -f1)
+s2=$(echo $serials | cut -d' ' -f2)
+s3=$(echo $serials | cut -d' ' -f3)
+
+adbs shell iw dev mesh0 del
+
+adb -s $s1 shell mesh_up -p
+adb -s $s3 shell mesh_up -p
+adb -s $s2 shell mesh_up
+
+ip1=$(get_ip $s1)
+ip3=$(get_ip $s3)
+
+mac2=$(get_mac $s2)
+
+adb -s $s1 shell iw mesh0 station set $mac2 plink_action open
+adb -s $s3 shell iw mesh0 station set $mac2 plink_action open
+adb -s $s1 shell ping -c3 $ip3
+adb -s $s3 shell ping -c3 $ip1
+adb -s $s1 shell iw mesh0 mpath dump
+adb -s $s3 shell iw mesh0 mpath dump

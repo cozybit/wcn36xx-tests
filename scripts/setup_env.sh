@@ -168,6 +168,11 @@ get_ip()
     adb -s $1 shell ip addr show mesh0|sed 's#^M##'|head -3|tail -1|sed 's#.*inet \(.*\)/8 .*#\1#'
 }
 
+get_mac()
+{
+    adb -s $1 shell ip addr show mesh0|sed 's#^M##'|head -2|tail -1|sed 's#.*ether \(.*\) brd .*#\1#'
+}
+
 join_mesh()
 {
     local channel=$1
