@@ -263,5 +263,5 @@ function add_on_exit()
 function echo_eval() 
 {
     echo "$@"
-    "$@"
+    eval "$@"
 }
