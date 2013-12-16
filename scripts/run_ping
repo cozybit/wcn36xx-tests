@@ -23,7 +23,7 @@ while getopts "h" options; do
 done
 
 reboot_phones
-join_mesh 36 HT20
+all_join_mesh 36 HT20
 
 logs=`tempfile -p r_p_`
 add_on_exit "rm $logs"

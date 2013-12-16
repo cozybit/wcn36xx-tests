@@ -28,7 +28,7 @@ run_iperf() {
     local ghz=$1
 
     local serials=$(adbs shell getprop ro.serialno)
-    
+
     local serial1=$(echo $serials | cut -d' ' -f1)
     local serial2=$(echo $serials | cut -d' ' -f2)
 
@@ -55,23 +55,23 @@ run_iperf() {
 echo "Changing to 5 GHz, channel 36, HT20"
 
 reboot_phones
-join_mesh 36 HT20
+all_join_mesh 36 HT20
 run_iperf HT20_5GHz
 
 echo "Changing to 5 GHz, channel 36, legacy"
 
 reboot_phones
-join_mesh 36
+all_join_mesh 36
 run_iperf legacy_5GHz
 
 echo "Changing to 2.4 GHz, channel 11, HT20"
 
 reboot_phones
-join_mesh 11 HT20
+all_join_mesh 11 HT20
 run_iperf HT20_2.4GHz
 
 echo "Changing to 2.4 GHz, channel 11, legacy"
 
 reboot_phones
-join_mesh 11
+all_join_mesh 11
 run_iperf legacy_2.4GHz

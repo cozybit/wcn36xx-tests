@@ -181,6 +181,13 @@ get_mac()
     adb -s $1 shell ip addr show mesh0|sed 's#^M##'|head -2|tail -1|sed 's#.*ether \(.*\) brd .*#\1#'
 }
 
+all_join_mesh()
+{
+    for dev in `list_xperiaz`; do
+        join_mesh $1 $2 $dev
+    done
+}
+
 join_mesh()
 {
     local channel=$1
@@ -193,6 +200,8 @@ join_mesh()
     (
         if [[ -z $leave ]]; then
             echo_eval adb -s $serial shell iw reg set US
+            sleep 0.5
+            echo_eval adb -s $serial shell iw reg get
             sleep 0.5
             echo_eval adb -s $serial shell iw phy phy0 interface add mesh0 type mp
             sleep 0.5
