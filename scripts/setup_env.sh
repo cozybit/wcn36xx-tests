@@ -1,7 +1,10 @@
 #!/bin/bash
 
 ROOT=$(readlink -f $(dirname $(readlink -f ${BASH_SOURCE}))/..)
-OUT=$ROOT/out/xperiaz
+
+DEV_NAME=$(readlink -f $ROOT/CONFIG | sed 's#.*/.*[.]\(.*\)$#\1#')
+
+OUT=$ROOT/out/$DEV_NAME
 KOUT=$OUT/kernel.build
 BP_OUT=$OUT/backports.build
 
@@ -15,12 +18,12 @@ fastboot() {
     sudo $ROOT/prebuilts/fastboot ${*}
 }
 
-# print message and exit the script                                             
-# usage: die <message>                                                          
-function die () {                                                               
-    echo ${*}                                                               
-    exit -1                                                                 
-}   
+# print message and exit the script
+# usage: die <message>
+function die () {
+    echo ${*}
+    exit -1
+}
 
 # perform a command quietly unless debugging is enabled.i
 # usage: Q <anything>
