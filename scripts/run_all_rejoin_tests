@@ -1,0 +1,116 @@
+#!/bin/bash
+
+D=$(dirname $(readlink -f ${BASH_SOURCE}))
+source "$D/setup_env.sh"
+
+rf_chamber=YT910LCY15
+d2=CB5A1TYVQF
+d3=BX903J8AWV
+
+dump_dmesg() {
+    local testname=$1
+    adb -s $rf_chamber shell dmesg > ${testname}.${rf_chamber}.dmesg
+    adb -s $d2 shell dmesg > ${testname}.${d2}.dmesg
+    adb -s $d3 shell dmesg > ${testname}.${d3}.dmesg
+}
+
+rm -rvf $D/../rejoin_logs
+mkdir -v $D/../rejoin_logs
+
+cd $D/../rejoin_logs
+
+##############################################################################
+
+testname=rejoin_leave_fix
+
+cat >${testname}.testlog <<EOF
+# Test description ($testname)
+
+Three phones are joined in a mesh, ping is used to establish mesh paths.  One
+phone is selected (via the -c option) to leave the mesh (by issuing "iw mesh0
+leave" on the device).  After a period of time the phone rejoins the mesh with
+"iw mesh0 join ...", this join command SHOULD allow the phone to rejoin the
+mesh.
+
+# Test log
+~~~
+EOF
+
+echo "*** Running: $testname"
+$D/run_multi_rejoin -l | tee -a ${testname}.testlog
+dump_dmesg $testname
+
+echo '~~~' >>${testname}.testlog
+
+##############################################################################
+
+testname=rejoin_from_out_of_range_delete_iface_fix
+
+cat >${testname}.testlog <<EOF
+# Test description ($testname)
+
+Three phones are joined in a mesh, ping is used to establish mesh paths.  One
+phone is moved out of range (via some means, usually an RF chamber).  After a
+period of time the phone is moved back in range.  We attempt to workaround
+problems rejoining the mesh by deleting and recreating the mesh interface.  The
+phone SHOULD be able to rejoin the mesh.
+
+# Test log
+~~~
+EOF
+
+echo "*** Running: $testname"
+$D/run_multi_rejoin -d -c $rf_chamber | tee -a ${testname}.testlog
+dump_dmesg $testname
+
+echo '~~~' >>${testname}.testlog
+
+##############################################################################
+
+testname=rejoin_from_out_of_range
+
+cat >${testname}.testlog <<EOF
+# Test description ($testname)
+
+Three phones are joined in a mesh, ping is used to establish mesh paths.  One
+phone is moved out of range (via some means, usually an RF chamber).  After a
+period of time the phone is moved back in range.  The phone SHOULD be able to
+rejoin the mesh.
+
+# Test log
+~~~
+EOF
+
+echo "*** Running: $testname"
+$D/run_multi_rejoin -c $rf_chamber | tee -a ${testname}.testlog
+dump_dmesg $testname
+
+echo '~~~' >>${testname}.testlog
+
+##############################################################################
+
+testname=rejoin_from_out_of_range_2nd_iface_fix
+
+cat >${testname}.testlog <<EOF
+# Test description ($testname)
+
+Three phones are joined in a mesh, ping is used to establish mesh paths.  One
+phone is moved out of range (via some means, usually an RF chamber).  After a
+period of time the phone is moved back in range.  We attempt to work around the
+problem by always creating a second interface.  The phone SHOULD be able to
+rejoin the mesh.
+
+This workaround was abusing the fact that the 2nd iface that wcn36xx would
+create was only using the legacy rates to communicate.
+
+# Test log
+~~~
+EOF
+
+echo "*** Running: $testname"
+$D/run_multi_rejoin -t -c $rf_chamber | tee -a ${testname}.testlog
+dump_dmesg $testname
+
+echo '~~~' >>${testname}.testlog
+
+##############################################################################
