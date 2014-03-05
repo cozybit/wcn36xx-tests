@@ -37,7 +37,7 @@ mesh.
 EOF
 
 echo "*** Running: $testname"
-$D/run_multi_rejoin -l | tee -a ${testname}.testlog
+$D/run_multi_rejoin -l 2>&1 | tee -a ${testname}.testlog
 dump_dmesg $testname
 
 echo '~~~' >>${testname}.testlog
@@ -60,7 +60,7 @@ phone SHOULD be able to rejoin the mesh.
 EOF
 
 echo "*** Running: $testname"
-$D/run_multi_rejoin -d -c $rf_chamber | tee -a ${testname}.testlog
+$D/run_multi_rejoin -d -c $rf_chamber 2>&1 | tee -a ${testname}.testlog
 dump_dmesg $testname
 
 echo '~~~' >>${testname}.testlog
@@ -82,7 +82,7 @@ rejoin the mesh.
 EOF
 
 echo "*** Running: $testname"
-$D/run_multi_rejoin -c $rf_chamber | tee -a ${testname}.testlog
+$D/run_multi_rejoin -c $rf_chamber 2>&1 | tee -a ${testname}.testlog
 dump_dmesg $testname
 
 echo '~~~' >>${testname}.testlog
@@ -108,7 +108,7 @@ create was only using the legacy rates to communicate.
 EOF
 
 echo "*** Running: $testname"
-$D/run_multi_rejoin -t -c $rf_chamber | tee -a ${testname}.testlog
+$D/run_multi_rejoin -t -c $rf_chamber 2>&1 | tee -a ${testname}.testlog
 dump_dmesg $testname
 
 echo '~~~' >>${testname}.testlog
