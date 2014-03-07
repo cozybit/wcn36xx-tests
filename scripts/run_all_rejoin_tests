@@ -3,15 +3,78 @@
 D=$(dirname $(readlink -f ${BASH_SOURCE}))
 source "$D/setup_env.sh"
 
-rf_chamber=YT910LCY15
-d2=CB5A1TYVQF
-d3=BX903J8AWV
+usage() {
+cat << EOF
+usage: $0 [<OPTIONS>] <IN_RF_CHAMBER> <PHONE_2> <PHONE_3>
+
+Runs *ALL* of the multi-peer mesh re-join tests.  Attempts to build a report
+that can be quickly editted and uploaded to a github/mardown wiki.
+
+RF_CHAMBER_PHONE - The adb id of the phone in the RF chamber (or the phone that
+                   is somehow goign to disappear from the mesh).
+
+PHONE_2,PHONE_3  - The adb id of another phone in the mesh.
+
+OPTIONS:
+   -h            Show this message.
+   -s            Skip rejoin workaround tests (2nd iface, delete iface)
+EOF
+}
+
+SKIPWORKAROUNDS=
+
+# parse the incoming parameters
+while getopts "hs" options; do
+    case $options in
+        h ) usage; exit 0;;
+        s ) SKIPWORKAROUNDS=1; shift;;
+        * ) usage; exit 1;;
+    esac
+done
+
+rf_chamber=$1; shift
+d2=$1        ; shift
+d3=$1        ; shift
+
+if [[ -z $rf_chamber ]]; then usage; exit 0; fi
+if [[ -z $d2         ]]; then usage; exit 0; fi
+if [[ -z $d3         ]]; then usage; exit 0; fi
+
+adb devices | grep -q $rf_chamber || die "Invalid device"
+adb devices | grep -q $d2         || die "Invalid device"
+adb devices | grep -q $d3         || die "Invalid device"
+
+echo "IN_RF_CHAMBER : $rf_chamber"
+echo "PHONE_2       : $d2"
+echo "PHONE_3       : $d3"
 
 dump_dmesg() {
     local testname=$1
     adb -s $rf_chamber shell dmesg > $timetag/${testname}.${rf_chamber}.dmesg
     adb -s $d2 shell dmesg > $timetag/${testname}.${d2}.dmesg
     adb -s $d3 shell dmesg > $timetag/${testname}.${d3}.dmesg
+}
+
+check_test () {
+    local status=$1
+
+    if [[ $status -eq 0 ]]; then
+        return
+    elif [[ $status -eq 2 ]]; then
+        echo "- \`FAIL\` : [$testname](#test-description-$testname)"
+    else
+        die "Test: '$testname', had an error that prevented test completion"
+    fi
+}
+
+run_test() {
+    echo "*** Running: $testname"
+    $D/run_multi_rejoin ${@} 2>&1 | tee -a ${testname}.testlog
+    test_status=$(check_test ${PIPESTATUS[0]})
+    dump_dmesg $testname
+    echo -e "~~~\n${test_status}\n" >>${testname}.testlog
+    echo ${test_status}
+    cat ${testname}.testlog >>${test_log_summary}
 }
 
 rm -rvf $D/../rejoin_logs
@@ -25,16 +88,54 @@ mkdir $timetag
 
 test_log_summary="${timetag}-test-log-summary.md"
 cat >$test_log_summary <<'EOF'
-# Test Target
+## Test Target
 - Commit-id: []()
 - Tree: []()
 
-# Test Summary
+## Test Summary
 - `PASS/FAIL` : [rejoin_leave_fix](#test-description-rejoin_leave_fix)
 - `PASS/FAIL` : [rejoin_from_out_of_range](#test-description-rejoin_from_out_of_range)
 - `PASS/FAIL` : [rejoin_from_out_of_range_2nd_iface_fix](#test-description-rejoin_from_out_of_range_2nd_iface_fix)
 - `PASS/FAIL` : [rejoin_from_out_of_range_delete_iface_fix](#test-description-rejoin_from_out_of_range_delete_iface_fix)
+
+## Firmware blob hashes, wcn36xx driver hashes
+~~~
 EOF
+
+adbs root
+
+adbs shell sha1sum /system/etc/firmware/wcnss.* 2>&1 | tee -a $test_log_summary
+adbs shell sha1sum /system/etc/firmware/wlan/prima/* 2>&1 | tee -a $test_log_summary
+adbs shell sha1sum /system/lib/modules/backports/* 2>&1 | tee -a $test_log_summary
+
+echo -e "~~~\n" >>$test_log_summary
+
+##############################################################################
+
+testname=rejoin_from_out_of_range
+
+cat >${testname}.testlog <<EOF
+## Test description ($testname)
+
+- [${rf_chamber}.dmesg]($timetag/${testname}.${rf_chamber}.dmesg) (RF chamber)
+- [${d2}.dmesg]($timetag/${testname}.${d2}.dmesg)
+- [${d3}.dmesg]($timetag/${testname}.${d3}.dmesg)
+
+Three phones are joined in a mesh, ping is used to establish mesh paths.  One
+phone is moved out of range (via some means, usually an RF chamber).  After a
+period of time the phone is moved back in range.  The phone SHOULD be able to
+rejoin the mesh.
+
+### Test log
+~~~
+EOF
+
+run_test -c $rf_chamber 2>&1
+
+echo "## Firmware version" >>${test_log_summary}
+echo -e "~~~" >>${test_log_summary}
+adbs shell sh -c "dmesg | grep 'wcn36xx.*firmware'" 2>&1 | tee -a $test_log_summary
+echo -e "~~~\n" >>${test_log_summary}
 
 ##############################################################################
 
@@ -58,12 +159,13 @@ mesh.
 
 EOF
 
-echo "*** Running: $testname"
-$D/run_multi_rejoin -l 2>&1 | tee -a ${testname}.testlog
-dump_dmesg $testname
+run_test -l
 
-echo '~~~' >>${testname}.testlog
-cat ${testname}.testlog >>${test_log_summary}
+##############################################################################
+
+if [[ -n $SKIPWORKAROUNDS ]]; then
+    exit 0
+fi
 
 ##############################################################################
 
@@ -86,39 +188,7 @@ phone SHOULD be able to rejoin the mesh.
 ~~~
 EOF
 
-echo "*** Running: $testname"
-$D/run_multi_rejoin -d -c $rf_chamber 2>&1 | tee -a ${testname}.testlog
-dump_dmesg $testname
-
-echo -e "~~~\n" >>${testname}.testlog
-cat ${testname}.testlog >>${test_log_summary}
-
-##############################################################################
-
-testname=rejoin_from_out_of_range
-
-cat >${testname}.testlog <<EOF
-## Test description ($testname)
-
-- [${rf_chamber}.dmesg]($timetag/${testname}.${rf_chamber}.dmesg) (RF chamber)
-- [${d2}.dmesg]($timetag/${testname}.${d2}.dmesg)
-- [${d3}.dmesg]($timetag/${testname}.${d3}.dmesg)
-
-Three phones are joined in a mesh, ping is used to establish mesh paths.  One
-phone is moved out of range (via some means, usually an RF chamber).  After a
-period of time the phone is moved back in range.  The phone SHOULD be able to
-rejoin the mesh.
-
-### Test log
-~~~
-EOF
-
-echo "*** Running: $testname"
-$D/run_multi_rejoin -c $rf_chamber 2>&1 | tee -a ${testname}.testlog
-dump_dmesg $testname
-
-echo -e "~~~\n" >>${testname}.testlog
-cat ${testname}.testlog >>${test_log_summary}
+run_test -d -c $rf_chamber
 
 ##############################################################################
 
@@ -144,11 +214,6 @@ create was only using the legacy rates to communicate.
 ~~~
 EOF
 
-echo "*** Running: $testname"
-$D/run_multi_rejoin -t -c $rf_chamber 2>&1 | tee -a ${testname}.testlog
-dump_dmesg $testname
-
-echo -e "~~~\n" >>${testname}.testlog
-cat ${testname}.testlog >>${test_log_summary}
+run_test -t -c $rf_chamber
 
 ##############################################################################

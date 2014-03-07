@@ -188,17 +188,28 @@ sleep_countdown 5
 $meshup $CHANNEL $HT $serial1 $LEAVE || die "joining mesh failed"
 sleep_countdown 5
 
-echo_eval adb -s $serial1 shell ping -c20 -f $ip2
-echo_eval adb -s $serial1 shell ping -c20 -f $ip3
+pingout=`tempfile`
+touch $pingout
 
-echo_eval adb -s $serial2 shell ping -c20 -f $ip1
-echo_eval adb -s $serial2 shell ping -c20 -f $ip3
+trap "rm $pingout" EXIT
 
-echo_eval adb -s $serial3 shell ping -c20 -f $ip1
-echo_eval adb -s $serial3 shell ping -c20 -f $ip2
+echo_eval adb -s $serial1 shell ping -c20 -f $ip2 | tee -a $pingout
+echo_eval adb -s $serial1 shell ping -c20 -f $ip3 | tee -a $pingout
+
+echo_eval adb -s $serial2 shell ping -c20 -f $ip1 | tee -a $pingout
+echo_eval adb -s $serial2 shell ping -c20 -f $ip3 | tee -a $pingout
+
+echo_eval adb -s $serial3 shell ping -c20 -f $ip1 | tee -a $pingout
+echo_eval adb -s $serial3 shell ping -c20 -f $ip2 | tee -a $pingout
 
 if [[ -n $PINGBG ]]; then
     echo_eval adbs shell killall ping
 else
     wait
+fi
+
+if [[ `grep ', 0% packet loss' $pingout | wc -l` -eq 6 ]]; then
+    exit 0
+else
+    exit 2;
 fi
