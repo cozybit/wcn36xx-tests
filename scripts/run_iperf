@@ -12,14 +12,18 @@ connected to the computer.
 
 OPTIONS:
    -h   Show this message.
+   -r   Skip reboot
 EOF
 }
 
+NO_REBOOT=
+
 # parse the incoming parameters
-while getopts "h" options; do
+while getopts "hr" options; do
     case $options in
-        h ) usage; exit 0;;
-        * ) usage; exit 1;;
+        h) usage; exit 0;;
+        r) NO_REBOOT=1 ;;
+        *) usage; exit 1;;
     esac
 done
 
@@ -36,14 +40,15 @@ run_iperf() {
     local ip2=$(gen_ip $serial2)
 
     echo "Starting server on $serial1/$ip1"
+    adbpath=`which adb`
 
     log1="/tmp/iperf_server_$serial1.$ghz.log"
-    xterm -e "sh -c \"adb -s $serial1 shell iperf -s -i 1 -u | tee $log1\"" &
+    xterm -e "sh -c \"$adbpath -s $serial1 shell iperf -s -i 1 -u | tee $log1\"" &
 
     echo "Starting client on $serial2/$ip2"
 
     log2="/tmp/iperf_client_$serial2.$ghz.log"
-    xterm -e "sh -c \"adb -s $serial2 shell iperf -c $ip1 -i 1 -t 10 -u -b 100M | tee $log2\""
+    xterm -e "sh -c \"$adbpath -s $serial2 shell iperf -c $ip1 -i 1 -t 10 -u -b 100M | tee $log2\""
 
     # Twice to make sure iperf quits!
     adb -s $serial1 shell /system/xbin/killall iperf
@@ -54,7 +59,13 @@ run_iperf() {
 
 echo "Changing to 5 GHz, channel 36, HT20"
 
-reboot_phones
+if [[ -z $NO_REBOOT ]]; then
+    reboot_phones
+fi
+
+adbs_p root
+sleep_countdown 2 "Waiting for remote adb to restart as root"
+
 all_join_mesh 36 HT20
 run_iperf HT20_5GHz
 
