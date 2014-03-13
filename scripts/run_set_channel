@@ -1,0 +1,78 @@
+#!/bin/bash
+
+D=$(dirname $(readlink -f ${BASH_SOURCE}))
+source "$D/setup_env.sh"
+
+usage() {
+cat << EOF
+usage: $0 [<OPTIONS>]
+
+Verifies that wcn36xx is able to use various channel configurations.
+
+OPTIONS:
+   -h   Show this message.
+   -r   Skip rebooting the phones.
+EOF
+}
+
+NOREBOOT=
+
+# parse the incoming parameters
+while getopts "rh" options; do
+    case $options in
+        h ) usage; exit 0;;
+        r ) NOREBOOT=1;;
+        * ) usage; exit 1;;
+    esac
+done
+
+wait_for_device() {
+    echo -n 'Waiting for phone to come alive'
+    while [[ $(adb -s $serial get-state) != "device" ]]; do
+        echo -n .
+        sleep 1
+    done
+    echo ' done.'
+}
+
+serial=`list_xperiaz | head -1`
+if [[ -z $NOREBOOT ]]; then
+    echo -n 'Rebooting...'
+    adb -s $serial reboot
+    echo ' done.'
+    wait_for_device
+fi
+
+channel=36
+ht=HT20
+iw=iw
+
+echo_eval adb -s $serial root
+sleep 2
+wait_for_device
+
+echo_eval adb -s $serial shell $iw reg set US
+sleep 0.5
+
+echo_eval adb -s $serial shell $iw reg get
+sleep 0.5
+
+#echo_eval adb -s $serial shell $iw mesh0 del
+#sleep 0.5
+
+echo_eval adb -s $serial shell $iw phy phy0 interface add mesh0 type mp
+sleep 0.5
+
+echo_eval adb -s $serial shell $iw dev mesh0 set channel $channel $ht
+sleep 0.5
+
+echo_eval adb -s $serial shell ip link set mesh0 up
+sleep 0.5
+
+o=$(adb -s $serial shell $iw dev mesh0 mesh join $MESHID 2>&1)
+if [[ $o =~ [[:space:]]* ]]; then
+    exit 0
+else
+    echo "mesh join output: '$o'"
+    exit 1
+fi
